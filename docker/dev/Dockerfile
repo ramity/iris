@@ -1,5 +1,6 @@
-FROM gcc:latest
+FROM gcc:bookworm
 WORKDIR /root/iris
+# Update apt
 RUN apt update
 RUN apt -y upgrade
 RUN apt -y dist-upgrade
