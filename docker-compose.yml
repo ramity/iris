@@ -7,7 +7,7 @@ services:
       dockerfile: docker/dev/Dockerfile
     image: iris_dev
     volumes:
-      - ./build:/root/iris/build
+      - ./bin:/root/iris/bin
       - ./data:/root/iris/data
       - ./include:/root/iris/include
       - ./scripts:/root/iris/scripts
