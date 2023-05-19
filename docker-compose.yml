@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+  iris_dev:
+    container_name: iris_dev
+    build:
+      context: ./
+      dockerfile: docker/dev/Dockerfile
+    image: iris_dev
+    volumes:
+      - ./build:/root/iris/build
+      - ./data:/root/iris/data
+      - ./include:/root/iris/include
+      - ./scripts:/root/iris/scripts
+      - ./src:/root/iris/src
+      - ./tests:/root/iris/tests
