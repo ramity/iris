@@ -1,10 +1,13 @@
-FROM gcc:bookworm
+FROM debian:bookworm
 WORKDIR /root/iris
 
 # Update apt
 RUN apt update
 RUN apt -y upgrade
 RUN apt -y dist-upgrade
+
+# Add g++ w/ both 32 and 64 bit support
+RUN apt -y install g++-multilib
 
 # Add mingw
 RUN apt -y install mingw-w64
