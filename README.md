@@ -12,7 +12,6 @@
 - Window + Linux binary executables
 
 ## Key formats
-- RSA
 - ECC
 
 ## Key management
