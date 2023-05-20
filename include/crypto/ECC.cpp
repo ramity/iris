@@ -20,8 +20,8 @@ ECC::ECC():
     hasher(this->hash_method, new CryptoPP::Redirector(this->output_sink))
 {
     // Config
-    this->set_public_key_path("/root/ramium/data/public_key");
-    this->set_private_key_path("/root/ramium/data/private_key");
+    this->set_public_key_path("/root/iris/data/public_key");
+    this->set_private_key_path("/root/iris/data/private_key");
     this->curve = CryptoPP::ASN1::secp521r1();
     this->output = "";
 }
