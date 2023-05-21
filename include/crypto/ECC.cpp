@@ -220,7 +220,7 @@ void ECC::decrypt()
     this->raw_plaintext = output;
     this->encoded_plaintext = this->encode(this->raw_plaintext);
     this->raw_plaintext_hash = this->hash(this->raw_plaintext);
-    this->encoded_plaintext_hash = this->hash(this->raw_plaintext_hash);
+    this->encoded_plaintext_hash = this->encode(this->raw_plaintext_hash);
 }
 
 void ECC::sign()
