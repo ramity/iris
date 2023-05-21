@@ -50,6 +50,13 @@ void key_management_prompt()
     std::cout << std::endl;
 }
 
+void key_operations_prompt()
+{
+    std::cout << "Select an operation:" << std::endl;
+    std::cout << "[0] - Back" << std::endl;
+    std::cout << std::endl;
+}
+
 void invalid_prompt()
 {
     std::cout << "Invalid input." << std::endl;
