@@ -8,6 +8,7 @@
 #include <cryptopp/osrng.h>
 #include <cryptopp/base64.h>
 #include <cryptopp/sha.h>
+#include <cryptopp/modes.h>
 
 class ECC
 {
@@ -18,6 +19,8 @@ class ECC
 
     // Interal values
     CryptoPP::AutoSeededRandomPool prng;
+    bool use_drng = false;
+    CryptoPP::OFB_Mode<CryptoPP::AES>::Encryption drng;
     CryptoPP::ECIES<CryptoPP::ECP>::PrivateKey private_key;
     CryptoPP::ECIES<CryptoPP::ECP>::PublicKey public_key;
     CryptoPP::OID curve;
@@ -84,6 +87,7 @@ class ECC
     std::string get_private_key_path();
     void set_private_key_path(std::string path);
 
+    void set_seed(std::string seed);
     void generate_keys();
     void read_keys();
     void write_keys();

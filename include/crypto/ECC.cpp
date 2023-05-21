@@ -88,11 +88,31 @@ std::string ECC::get_private_key_path()
     return this->private_key_path;
 }
 
+void ECC::set_seed(std::string seed)
+{
+    this->use_drng = true;
+    std::string hash = this->hash(seed);
+    int key_size = 32;
+    int iv_size = 16;
+    std::string key_string = hash.substr(0, key_size);
+    std::string iv_string = hash.substr(key_size, iv_size);
+    CryptoPP::SecByteBlock key(reinterpret_cast<const CryptoPP::byte *>(key_string.data()), key_size);
+    CryptoPP::SecByteBlock iv(reinterpret_cast<const CryptoPP::byte *>(iv_string.data()), iv_size);
+    this->drng.SetKeyWithIV(key, key_size, iv, iv_size);
+}
+
 void ECC::generate_keys()
 {
-    this->private_key.Initialize(this->prng, this->curve);
-    this->private_key.MakePublicKey(this->public_key);
+    if (this->use_drng)
+    {
+        this->private_key.Initialize(this->drng, this->curve);
+    }
+    else
+    {
+        this->private_key.Initialize(this->prng, this->curve);
+    }
 
+    this->private_key.MakePublicKey(this->public_key);
     this->init_key_operations();
 }
 
@@ -160,12 +180,12 @@ void ECC::init_key_operations()
     this->encoded_public_key_hash = this->encode(this->raw_public_key_hash);
 
     // Convert private_key to all private_key variants
-    // this->output = "";
-    // private_key.Save(this->output_sink);
-    // this->raw_private_key = this->output;
-    // this->encoded_private_key = this->encode(this->raw_private_key);
-    // this->raw_private_key_hash = this->hash(this->raw_private_key);
-    // this->encoded_private_key_hash = this->encode(this->raw_private_key_hash);
+    this->output = "";
+    private_key.Save(this->output_sink);
+    this->raw_private_key = this->output;
+    this->encoded_private_key = this->encode(this->raw_private_key);
+    this->raw_private_key_hash = this->hash(this->raw_private_key);
+    this->encoded_private_key_hash = this->encode(this->raw_private_key_hash);
 }
 
 void ECC::encrypt()
