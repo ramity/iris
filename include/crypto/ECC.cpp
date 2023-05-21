@@ -236,8 +236,8 @@ void ECC::sign()
 
     this->raw_signature = this->output;
     this->encoded_signature = this->encode(this->raw_signature);
-    // this->raw_signature_hash = this->hash(this->raw_signature);
-    // this->encoded_signature_hash = this->encode(this->raw_signature_hash);
+    this->raw_signature_hash = this->hash(this->raw_signature);
+    this->encoded_signature_hash = this->encode(this->raw_signature_hash);
 }
 
 bool ECC::verify()
@@ -346,15 +346,15 @@ std::string ECC::get_encoded_signature()
     return this->encoded_signature;
 }
 
-// std::string ECC::get_signature_hash()
-// {
-//    return this->signature_hash;
-// }
+std::string ECC::get_signature_hash()
+{
+   return this->signature_hash;
+}
 
-// std::string ECC::get_encoded_signature_hash()
-// {
-//    return this->encoded_signature_hash;
-// }
+std::string ECC::get_encoded_signature_hash()
+{
+   return this->encoded_signature_hash;
+}
 
 void ECC::set_raw_signature(std::string raw_signature)
 {
@@ -366,15 +366,15 @@ void ECC::set_encoded_signature(std::string encoded_signature)
     this->encoded_signature = encoded_signature;
 }
 
-// void ECC::set_signature_hash(std::string signature_hash)
-// {
-//    this->signature_hash = signature_hash;
-// }
+void ECC::set_signature_hash(std::string signature_hash)
+{
+   this->signature_hash = signature_hash;
+}
 
-// void ECC::set_encoded_signature_hash(std::string encoded_signature_hash)
-// {
-//    this->encoded_signature_hash = encoded_signature_hash;
-// }
+void ECC::set_encoded_signature_hash(std::string encoded_signature_hash)
+{
+   this->encoded_signature_hash = encoded_signature_hash;
+}
 
 // Public key
 std::string ECC::get_raw_public_key()
