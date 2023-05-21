@@ -42,8 +42,40 @@ int main()
         return 1;
     }
 
-    std::cout << ecc.get_encoded_signature() << std::endl;
-    // std::cout << ecc2.get_encoded_public_key_hash() << std::endl;
+    // Verify deterministic key generation
+    std::string seed = "Unlimited games but no games";
+    ECC ecc3 = ECC();
+    ecc3.set_seed(seed);
+    ecc3.generate_keys();
+    ECC ecc4 = ECC();
+    ecc4.set_seed(seed);
+    ecc4.generate_keys();
+
+    std::cout << ecc3.get_encoded_public_key() << std::endl << std::endl;
+    std::cout << ecc4.get_encoded_public_key() << std::endl << std::endl;
+
+    if (ecc3.get_raw_public_key() != ecc4.get_raw_public_key())
+    {
+        std::cout << "[-] Failed seeded key generation test" << std::endl;
+        return 1;
+    }
+
+    // Verify deterministic key generation from hash chain
+    seed = ecc.hash(seed);
+    ecc3.set_seed(seed);
+    ecc4.set_seed(seed);
+    ecc3.generate_keys();
+    ecc4.generate_keys();
+
+    std::cout << ecc3.get_encoded_public_key() << std::endl << std::endl;
+    std::cout << ecc4.get_encoded_public_key() << std::endl << std::endl;
+
+    if (ecc3.get_raw_public_key() != ecc4.get_raw_public_key())
+    {
+        std::cout << "[-] Failed seeded key generation test" << std::endl;
+        return 1;
+    }
+
 
     return 0;
 }
