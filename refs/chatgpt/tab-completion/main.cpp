@@ -42,7 +42,7 @@ int main() {
     std::string suggestion;
 
     while (true) {
-        std::cout << "> " << input;
+        std::cout << "\r> " << input << std::flush;
 
         char ch = readChar();
 
@@ -50,6 +50,7 @@ int main() {
             // User pressed Enter
             std::cout << std::endl;
             // Process the user's input here
+            if (input == "exit") break;
             std::cout << "You entered: " << input << std::endl;
             input.clear();
         } else if (ch == '\t') {
@@ -57,12 +58,11 @@ int main() {
             suggestion = autocomplete(input);
             if (!suggestion.empty()) {
                 input = suggestion;
-                std::cout << suggestion;
             }
         } else {
             // Append character to input
             input += ch;
-            std::cout << ch;
+            std::cout << ch << std::flush;
         }
     }
 
