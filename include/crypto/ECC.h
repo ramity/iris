@@ -56,8 +56,8 @@ class ECC
     // Signature
     std::string raw_signature;
     std::string encoded_signature;
-    // std::string signature_hash;
-    // std::string encoded_signature_hash;
+    std::string raw_signature_hash;
+    std::string encoded_signature_hash;
 
     // Public key
     std::string raw_public_key;
@@ -121,12 +121,12 @@ class ECC
     // Signature
     std::string get_raw_signature();
     std::string get_encoded_signature();
-    // std::string get_signature_hash();
-    // std::string get_encoded_signature_hash();
+    std::string get_raw_signature_hash();
+    std::string get_encoded_signature_hash();
     void set_raw_signature(std::string raw_signature);
     void set_encoded_signature(std::string encoded_signature);
-    // void set_signature_hash(std::string signature_hash);
-    // void set_encoded_signature_hash(std::string encoded_signature_hash);
+    void set_raw_signature_hash(std::string signature_hash);
+    void set_encoded_signature_hash(std::string encoded_signature_hash);
 
     // Public key
     std::string get_raw_public_key();

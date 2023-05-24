@@ -346,9 +346,9 @@ std::string ECC::get_encoded_signature()
     return this->encoded_signature;
 }
 
-std::string ECC::get_signature_hash()
+std::string ECC::get_raw_signature_hash()
 {
-   return this->signature_hash;
+   return this->raw_signature_hash;
 }
 
 std::string ECC::get_encoded_signature_hash()
@@ -366,9 +366,9 @@ void ECC::set_encoded_signature(std::string encoded_signature)
     this->encoded_signature = encoded_signature;
 }
 
-void ECC::set_signature_hash(std::string signature_hash)
+void ECC::set_raw_signature_hash(std::string raw_signature_hash)
 {
-   this->signature_hash = signature_hash;
+   this->raw_signature_hash = raw_signature_hash;
 }
 
 void ECC::set_encoded_signature_hash(std::string encoded_signature_hash)
