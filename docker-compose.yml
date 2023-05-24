@@ -10,6 +10,7 @@ services:
       - ./bin:/root/iris/bin
       - ./data:/root/iris/data
       - ./include:/root/iris/include
+      - ./libs:/root/iris/libs
       - ./refs:/root/iris/refs
       - ./scripts:/root/iris/scripts
       - ./src:/root/iris/src

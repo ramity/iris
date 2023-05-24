@@ -9,7 +9,7 @@
 # Planned features
 
 - Dockerized development and build environments
-- Window + Linux binary executables
+- 64-bit Window and 64-bit Linux binary executables
 
 ## Key formats
 - ECC
