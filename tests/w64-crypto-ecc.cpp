@@ -80,7 +80,6 @@ int main()
         return 1;
     }
 
-
     // Keep prompt open
     std::cout << "Press Enter to exit...";
     std::cin.get();
