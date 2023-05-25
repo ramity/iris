@@ -17,7 +17,7 @@ fi
 # Compile and execute each file in tests dir
 for FILE in $TGT
 do
-    if [ -f "$FILE" ]
+    if [ -f "$FILE" ] && ! [ "$FILE" == w64* ]
     then
         echo -e "\033[36m[C] Compiling\t$FILE\033[0m"
         g++ -Wall -I $INC $FILE -o $BIN -lpthread -lcryptopp
