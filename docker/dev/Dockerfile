@@ -6,8 +6,6 @@ RUN apt update
 RUN apt -y upgrade
 RUN apt -y dist-upgrade
 
-# Add g++ w/ both 32 and 64 bit support
-# RUN apt -y install g++-multilib
 # Add g++
 RUN apt -y install g++
 
@@ -17,9 +15,6 @@ RUN apt -y install mingw-w64
 # Add compile deps
 RUN apt -y install make
 RUN apt -y install git
-
-# Install cryptopp deps
-# RUN apt -y install libcrypto++-dev libcrypto++-doc libcrypto++-utils
 
 # Keep container open
 ENTRYPOINT tail -f /dev/null
