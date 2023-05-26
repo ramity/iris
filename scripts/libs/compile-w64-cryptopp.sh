@@ -19,10 +19,10 @@ fi
 cd $DIR
 
 # conditionally create branch if it does not exist and checkout specific tag
-if git rev-parse --quiet --verify "refs/tags/$tag" > /dev/null
+if git branch | grep -q $VER
 then
-    # branch exists, checkout
-    git checkout $VER
+    # branch exists, checkout quietly if already on branch
+    git checkout $VER > /dev/null 2>&1
 else
     # branch does not exist, checkout and create
     git checkout tags/$VER -b $VER
