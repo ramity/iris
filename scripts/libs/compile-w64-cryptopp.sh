@@ -2,7 +2,7 @@ DIR="/root/iris/libs/src/cryptopp"
 VER="CRYPTOPP_8_7_0"
 CXX="x86_64-w64-mingw32-g++"
 CXXFLAGS="-m64"
-PREFIX="/root/iris/libs/windows/crytopp"
+PREFIX="/root/iris/libs/windows/cryptopp"
 
 # create prefix dir if it does not exist
 if ! [ -d "$PREFIX" ]
