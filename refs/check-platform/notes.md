@@ -1,0 +1,1 @@
+I was attempting to create a platform agnostic entry point for the application to start from and created the os-check.bash and run.cpp files. It turns out that I'll just have to have separate binary files for each platform to serve as entrypoints. There doesn't seem to be a unified way to use a script or cpp file to use as a singular entrypoint.
