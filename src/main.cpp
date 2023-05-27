@@ -3,7 +3,6 @@
 
 void entry_prompt()
 {
-    std::cout << "╔════════════════════════════════════════════════════════════════════╗" << std::endl;
     std::cout << std::endl;
     std::cout << "                        ...',;;:cccccccc:;,.." << std::endl;
     std::cout << "                    ..,;:cccc::::ccccclloooolc;'." << std::endl;
@@ -22,10 +21,8 @@ void entry_prompt()
     std::cout << "              ...............''',,,;;;,,''''''......" << std::endl;
     std::cout << "                   ............................" << std::endl;
     std::cout << std::endl;
-    std::cout << "  Without freedom of thought; there can be no such thing as wisdom;" << std::endl;
+    std::cout << "  Without freedom of thought, there can be no such thing as wisdom;" << std::endl;
     std::cout << "   and no such thing as public liberty, without freedom of speech." << std::endl;
-    std::cout << std::endl;
-    std::cout << "╚════════════════════════════════════════════════════════════════════╝" << std::endl;
     std::cout << std::endl;
 }
 
@@ -86,12 +83,13 @@ void exit_prompt()
     std::cout << std::endl;
 }
 
-int main()
+int main(int argc, char* argv[])
 {
     entry_prompt();
 
     // Init memory
     int input;
+    std::string arg_input;
 
     // Explicitly goto category loop
     goto category_loop;
