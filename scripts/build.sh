@@ -56,7 +56,3 @@ then
 else
     echo -e "\033[31m[C] Failed\t$TGT->$W64_BIN\033[0m"
 fi
-
-# Compile run file
-
-g++ -Wall /root/iris/src/run.cpp -o $BUILD_DIR/run
