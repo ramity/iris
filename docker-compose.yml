@@ -8,6 +8,7 @@ services:
     image: iris_dev
     volumes:
       - ./bin:/root/iris/bin
+      - ./build:/root/iris/build
       - ./data:/root/iris/data
       - ./include:/root/iris/include
       - ./libs:/root/iris/libs
