@@ -1,6 +1,9 @@
-INC="/root/iris/include/"
+INC="/root/iris/include"
 BIN="/root/iris/bin/test"
 TGT="/root/iris/tests/*"
+
+CRYPTOPP_INC="/root/iris/libs/linux/cryptopp/include"
+CRYPTOPP_LIB="/root/iris/libs/linux/cryptopp/lib"
 
 # Remove bin file if it exists
 if [ -f "$BIN" ]
@@ -20,7 +23,7 @@ do
     if [ -f "$FILE" ] && ! [ "$FILE" == w64* ]
     then
         echo -e "\033[36m[C] Compiling\t$FILE\033[0m"
-        g++ -Wall -I $INC $FILE -o $BIN -lpthread -lcryptopp
+        g++ -Wall $FILE -o $BIN -I $CRYPTOPP_INC -L $CRYPTOPP_LIB -I $INC -lcryptopp -static
 
         if [ -f "$BIN" ]
         then
