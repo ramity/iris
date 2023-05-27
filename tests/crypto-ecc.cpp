@@ -3,13 +3,34 @@
 
 #include "crypto/ECC.cpp"
 
+// Handle platform specific variations and create get_current_path macro
+#if defined(_WIN32) || defined(_WIN64)
+    #include <direct.h>
+    #define get_current_path _getcwd
+    const char path_separator = '\\';
+#else
+    #include <unistd.h>
+    #define get_current_path getcwd
+    const char path_separator = '/';
+#endif
+
 int main()
 {
+    // Setup pathed vars
+    char current_path_chars[FILENAME_MAX];
+    get_current_path(current_path_chars, sizeof(current_path_chars));
+    std::string current_path(current_path_chars);
+    std::string data_path = current_path + path_separator + "data";
+    std::string public_key_path = data_path + path_separator + "public_key";
+    std::string private_key_path = data_path + path_separator + "private_key";
+
     // Config
     std::string message = "Hello, world!";
 
     // Init
     ECC ecc = ECC();
+    ecc.set_public_key_path(public_key_path);
+    ecc.set_private_key_path(private_key_path);
     ecc.generate_keys();
     ecc.set_raw_plaintext(message);
 
@@ -33,6 +54,8 @@ int main()
     // Write keys, create new ECC instance, read keys, transfer raw ciphertext, decrypt, check if raw_plaintexts match 
     ecc.write_keys();
     ECC ecc2 = ECC();
+    ecc2.set_public_key_path(public_key_path);
+    ecc2.set_private_key_path(private_key_path);
     ecc2.read_keys();
     ecc2.set_raw_ciphertext(ecc.get_raw_ciphertext());
     ecc2.decrypt();
@@ -76,6 +99,9 @@ int main()
         return 1;
     }
 
+    // Keep prompt open
+    std::cout << "Press Enter to exit...";
+    std::cin.get();
 
     return 0;
 }
