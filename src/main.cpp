@@ -1,5 +1,5 @@
 #include <iostream>
-#include <ctime>
+#include <cstring>
 
 void cout_repo_ad()
 {
@@ -21,7 +21,7 @@ void cout_general_help_prompt()
 {
     cout_iris_ascii_art();
     std::cout << std::endl;
-    std::cout << "Usage: iris COMMAND"
+    std::cout << "Usage: iris COMMAND" << std::endl;
     std::cout << std::endl;
     std::cout << "A portable management tool forcryptography operations" << std::endl;
     std::cout << std::endl;
@@ -54,7 +54,7 @@ void cout_keypair_help_prompt()
     cout_repo_ad();
 }
 
-void cout_identity_prompt()
+void cout_identity_help_prompt()
 {
     cout_iris_ascii_art();
     std::cout << std::endl;
@@ -71,7 +71,7 @@ void cout_identity_prompt()
     cout_repo_ad();
 }
 
-void cout_escrow_prompt()
+void cout_escrow_help_prompt()
 {
     cout_iris_ascii_art();
     std::cout << std::endl;
@@ -87,7 +87,7 @@ void cout_escrow_prompt()
     cout_repo_ad();
 }
 
-void cout_onion_prompt()
+void cout_onion_help_prompt()
 {
     cout_iris_ascii_art();
     std::cout << std::endl;
@@ -106,55 +106,55 @@ int main(int arg_count, char * arg_values[])
 {
     // Check for --help flag
 
-    if (arg_count == 1 || arg_values[1] == "--help")
+    if (arg_count == 1 || strcmp(arg_values[1], "--help") == 0)
     {
-        display_general_help_prompt();
+        cout_general_help_prompt();
         return 0;
     }
 
     // keypair
 
-    else if (arg_values[1] == "keypair")
+    else if (strcmp(arg_values[1], "keypair") == 0)
     {
         // Check for --help flag
 
-        if (arg_count == 2 || arg_values[2] == "--help")
+        if (arg_count == 2 || strcmp(arg_values[2], "--help") == 0)
         {
-            display_keypair_help_prompt();
+            cout_keypair_help_prompt();
             return 0;
         }
 
         // generate DIR_PATH
 
-        else if (arg_values[2] == "generate")
+        else if (strcmp(arg_values[2], "generate") == 0)
         {
 
         }
 
         // delete KEY_PATH
 
-        else if (arg_values[2] == "delete")
+        else if (strcmp(arg_values[2], "delete") == 0)
         {
 
         }
 
         // encrypt KEY_PATH TEXT
 
-        else if (arg_values[2] == "encrypt")
+        else if (strcmp(arg_values[2], "encrypt") == 0)
         {
 
         }
 
         // decrypt KEY_PATH TEXT
 
-        else if (arg_values[2] == "decrypt")
+        else if (strcmp(arg_values[2], "decrypt") == 0)
         {
 
         }
 
         // sign KEY_PATH MESSAGE
 
-        else if (arg_values[2] == "sign")
+        else if (strcmp(arg_values[2], "sign") == 0)
         {
 
         }
@@ -170,40 +170,40 @@ int main(int arg_count, char * arg_values[])
 
     // identity
 
-    else if (arg_values[1] == "identity")
+    else if (strcmp(arg_values[1], "identity") == 0)
     {
         // Check for --help flag
 
-        if (arg_count == 2 || arg_values[2] == "--help")
+        if (arg_count == 2 || strcmp(arg_values[2], "--help") == 0)
         {
-            display_identity_help_prompt();
+            cout_identity_help_prompt();
             return 0;
         }
 
         // add KEY_PATH KEY_TEXT
 
-        else if (arg_values[2] == "add")
+        else if (strcmp(arg_values[2], "add") == 0)
         {
 
         }
 
         // remove KEY_PATH
 
-        else if (arg_values[2] == "remove")
+        else if (strcmp(arg_values[2], "remove") == 0)
         {
 
         }
 
         // list KEY_DIR
 
-        else if (arg_values[2] == "list")
+        else if (strcmp(arg_values[2], "list") == 0)
         {
 
         }
 
         // verify_signature KEY_PATH SIGNATURE MESSAGE_HASH
 
-        else if (arg_values[2] == "verify_signature")
+        else if (strcmp(arg_values[2], "verify_signature") == 0)
         {
 
         }
@@ -218,33 +218,33 @@ int main(int arg_count, char * arg_values[])
 
     // escrow
 
-    else if (arg_values[1] == "escrow")
+    else if (strcmp(arg_values[1], "escrow") == 0)
     {
         // Check for --help flag
 
-        if (arg_count == 2 || arg_values[2] == "--help")
+        if (arg_count == 2 || strcmp(arg_values[2], "--help") == 0)
         {
-            display_escrow_help_prompt();
+            cout_escrow_help_prompt();
             return 0;
         }
 
         // request TYPE TRUSTED_IDENTITY_KEY_PATH
 
-        else if (arg_values[2] == "request")
+        else if (strcmp(arg_values[2], "request") == 0)
         {
 
         }
 
         // generate TYPE KEY_PATH
 
-        else if (arg_values[2] == "generate")
+        else if (strcmp(arg_values[2], "generate") == 0)
         {
 
         }
 
         // process TYPE TRUSTED_IDENTITY_KEY_PATH
 
-        else if (arg_values[2] == "process")
+        else if (strcmp(arg_values[2], "process") == 0)
         {
 
         }
@@ -259,26 +259,26 @@ int main(int arg_count, char * arg_values[])
 
     // onion
  
-    else if (arg_values[1] == "onion")
+    else if (strcmp(arg_values[1], "onion") == 0)
     {
         // Check for --help flag
 
-        if (arg_count == 2 || arg_values[2] == "--help")
+        if (arg_count == 2 || strcmp(arg_values[2], "--help") == 0)
         {
-            display_identity_help_prompt();
+            cout_identity_help_prompt();
             return 0;
         }
 
         // create TYPE [IDENTITY_KEY_PATH_ARRAY] TEXT
 
-        else if (arg_values[2] == "process")
+        else if (strcmp(arg_values[2], "process") == 0)
         {
 
         }
 
         // decrypt TYPE KEY_PATH
 
-        else if (arg_values[2] == "process")
+        else if (strcmp(arg_values[2], "process") == 0)
         {
 
         }
