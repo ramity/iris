@@ -12,16 +12,14 @@ fi
 
 UNIX_TIME=$(date +%s)
 BUILD_DIR="/root/iris/build/$UNIX_TIME"
-BIN_DIR="$BUILD_DIR/bin"
 DATA_DIR="$BUILD_DIR/data"
 mkdir -p $BUILD_DIR
-mkdir $BIN_DIR
 mkdir $DATA_DIR
 
 # Define platform specific bins
 
-L64_BIN="$BIN_DIR/linux.bin"
-W64_BIN="$BIN_DIR/windows.exe"
+L64_BIN="$BUILD_DIR/iris"
+W64_BIN="$BUILD_DIR/iris.exe"
 
 # Linux compile config
 
@@ -37,7 +35,7 @@ W64_CPL="x86_64-w64-mingw32-g++ -static-libgcc -static-libstdc++"
 
 # Linux compile
 
-echo -e "\033[36m[C] Compiling\Linux 64-bit\033[0m"
+echo -e "\033[36m[C] Compiling Linux 64-bit\033[0m"
 $L64_CPL -Wall $TGT -o $L64_BIN -I $L64_CRYPTOPP_INC -L $L64_CRYPTOPP_LIB -I $IRIS_INC -lcryptopp -static
 if [ -f "$L64_BIN" ]
 then
