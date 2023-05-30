@@ -1,141 +1,302 @@
 #include <iostream>
 #include <ctime>
 
-void entry_prompt()
+void cout_repo_ad()
 {
-    std::cout << std::endl;
-    std::cout << "                        ...',;;:cccccccc:;,.." << std::endl;
-    std::cout << "                    ..,;:cccc::::ccccclloooolc;'." << std::endl;
-    std::cout << "                 .',;:::;;;;:loodxk0kkxxkxxdocccc;;'.." << std::endl;
-    std::cout << "               .,;;;,,;:coxldKNWWWMMMMWNNWWNNKkdolcccc:,." << std::endl;
-    std::cout << "            .',;;,',;lxo:...dXWMMMMMMMMNkloOXNNNX0koc:coo;." << std::endl;
-    std::cout << "         ..,;:;,,,:ldl'   .kWMMMWXXNWMMMMXd..':d0XWWN0d:;lkd," << std::endl;
-    std::cout << "       ..,;;,,'':loc.     lKMMMNl. .c0KNWNK:  ..';lx00X0l,cxo,." << std::endl;
-    std::cout << "     ..''....'cooc.       c0NMMX;   .l0XWN0;       ,ddx00occl:." << std::endl;
-    std::cout << "   ..'..  .':odc.         .x0KKKkolcld000xc.       .cxxxkkdl:,.." << std::endl;
-    std::cout << " ..''..   ;dxolc;'         .lxx000kkxx00kc.      .;looolllol:'.." << std::endl;
-    std::cout << "..'..    .':lloolc:,..       'lxkkkkk0kd,   ..':clc:::;,,;:;,'.." << std::endl;
-    std::cout << "......   ....',;;;:ccc::;;,''',:loddol:,,;:clllolc:;;,'........" << std::endl;
-    std::cout << "    .     ....'''',,,;;:cccccclllloooollllccc:c:::;,'.." << std::endl;
-    std::cout << "            .......'',,,,,,,,;;::::ccccc::::;;;,,''..." << std::endl;
-    std::cout << "              ...............''',,,;;;,,''''''......" << std::endl;
-    std::cout << "                   ............................" << std::endl;
-    std::cout << std::endl;
-    std::cout << "  Without freedom of thought, there can be no such thing as wisdom;" << std::endl;
-    std::cout << "   and no such thing as public liberty, without freedom of speech." << std::endl;
-    std::cout << std::endl;
+    std::cout << "To get more help with iris, check out the github repo at https://github.com/ramity/iris" << std::endl;
 }
 
-void category_prompt()
+void cout_iris_ascii_art()
 {
-    std::cout << "Select a category:" << std::endl;
-    std::cout << "[0] - Exit program" << std::endl;
-    std::cout << "[1] - Key management" << std::endl;
-    std::cout << "[2] - Key operations" << std::endl;
-    std::cout << std::endl;
+    std::cout << "::::::::::: :::::::::  ::::::::::: :::::::: " << std::endl;
+    std::cout << "    :+:     :+:    :+:     :+:    :+:    :+:" << std::endl;
+    std::cout << "    +:+     +:+    +:+     +:+    +:+       " << std::endl;
+    std::cout << "    +#+     +#++:++#:      +#+    +#++:++#++" << std::endl;
+    std::cout << "    +#+     +#+    +#+     +#+           +#+" << std::endl;
+    std::cout << "    #+#     #+#    #+#     #+#    #+#    #+#" << std::endl;
+    std::cout << "########### ###    ### ########### ######## " << std::endl;
 }
 
-void key_management_prompt()
+void cout_general_help_prompt()
 {
-    std::cout << "Select an operation:" << std::endl;
-    std::cout << "[0] - Back" << std::endl;
-    std::cout << "[1] - Generate keypair" << std::endl;
-    std::cout << "[2] - Read keys" << std::endl;
-    std::cout << "[3] - Write keys" << std::endl;
-    std::cout << "[4] - Print public key" << std::endl;
-    std::cout << "[5] - Print public key" << std::endl;
+    cout_iris_ascii_art();
     std::cout << std::endl;
+    std::cout << "Usage: iris COMMAND"
+    std::cout << std::endl;
+    std::cout << "A portable management tool forcryptography operations" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Commands:" << std::endl;
+    std::cout << "  keypair      Keypair related operations" << std::endl;
+    std::cout << "  identity     Identity related operations" << std::endl;
+    std::cout << "  escrow       Perform or request operations from a trusted third party" << std::endl;
+    std::cout << "  onion        A special message type that requires group cooperation to open" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Run 'iris COMMAND --help' for more information on a command." << std::endl;
+    std::cout << std::endl;
+    cout_repo_ad();
 }
 
-void key_operations_prompt()
+void cout_keypair_help_prompt()
 {
-    std::cout << "Select an operation:" << std::endl;
-    std::cout << "[0] - Back" << std::endl;
+    cout_iris_ascii_art();
     std::cout << std::endl;
+    std::cout << "Usage: iris keypair COMMAND" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Keypair related operations" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Commands:" << std::endl;
+    std::cout << "  generate DIR_PATH" << std::endl;
+    std::cout << "  delete KEY_PATH" << std::endl;
+    std::cout << "  encrypt KEY_PATH TEXT" << std::endl;
+    std::cout << "  decrypt KEY_PATH TEXT" << std::endl;
+    std::cout << "  sign KEY_PATH MESSAGE" << std::endl;
+    std::cout << std::endl;
+    cout_repo_ad();
 }
 
-void invalid_prompt()
+void cout_identity_prompt()
 {
-    std::cout << "Invalid input." << std::endl;
+    cout_iris_ascii_art();
     std::cout << std::endl;
+    std::cout << "Usage: iris identity COMMAND" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Identity related operations" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Commands:" << std::endl;
+    std::cout << "  add KEY_PATH KEY_TEXT" << std::endl;
+    std::cout << "  remove KEY_PATH" << std::endl;
+    std::cout << "  list KEY_DIR" << std::endl;
+    std::cout << "  verify_signature KEY_PATH SIGNATURE MESSAGE_HASH" << std::endl;
+    std::cout << std::endl;
+    cout_repo_ad();
 }
 
-void exit_prompt()
+void cout_escrow_prompt()
 {
-    srand(time(NULL));
-    int quote_count = 12; 
-    int random_index = rand() % quote_count;
-    std::string exit_quotes[quote_count] = {
-        "Be well, do good work, and keep in touch.",
-        "Farewell, my friend, till we meet again someday somewhere.",
-        "Whatever you do in life, surround yourself with smart people who'll argue with you.",
-        "Our lives begin to end the day we become silent about things that matter.",
-        "Find more pleasure in intelligent dissent than in passive aggreement.",
-        "Too often we enjoy the comfort of opinion without the discomfort of thought.",
-        "You can't cross the sea merely by standing and staring at the water.",
-        "Stand before the people you fear and speak your mind - even if your voice shakes.",
-        "Censorship reflects a society's lack of confidence in itself.",
-        "Any book worth banning is a book worth reading.",
-        "A truly great library has something to offend everyone.",
-        "We must never forget the horrors which an unchecked hatred can lead."
-    };
-    std::cout << exit_quotes[random_index] << std::endl;
+    cout_iris_ascii_art();
     std::cout << std::endl;
+    std::cout << "Usage: iris escrow COMMAND" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Perform or request operations from a trusted third party" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Commands:" << std::endl;
+    std::cout << "  request TYPE TRUSTED_IDENTITY_KEY_PATH" << std::endl;
+    std::cout << "  generate TYPE KEY_PATH" << std::endl;
+    std::cout << "  process TYPE TRUSTED_IDENTITY_KEY_PATH" << std::endl;
+    std::cout << std::endl;
+    cout_repo_ad();
 }
 
-int main(int argc, char* argv[])
+void cout_onion_prompt()
 {
-    entry_prompt();
+    cout_iris_ascii_art();
+    std::cout << std::endl;
+    std::cout << "Usage: iris onion COMMAND" << std::endl;
+    std::cout << std::endl;
+    std::cout << "A special message type that requires group cooperation to open" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Commands:" << std::endl;
+    std::cout << "  create TYPE [IDENTITY_KEY_PATH_ARRAY] TEXT" << std::endl;
+    std::cout << "  decrypt TYPE KEY_PATH" << std::endl;
+    std::cout << std::endl;
+    cout_repo_ad();
+}
 
-    // Init memory
-    int input;
-    std::string arg_input;
+int main(int arg_count, char * arg_values[])
+{
+    // Check for --help flag
 
-    // Explicitly goto category loop
-    goto category_loop;
+    if (arg_count == 1 || arg_values[1] == "--help")
+    {
+        display_general_help_prompt();
+        return 0;
+    }
 
-    // Loops
-    // [
-    category_loop:
-        category_prompt();
-        std::cin >> input;
-        std::cout << std::endl;
-        goto category_process;
+    // keypair
 
-    key_management_loop:
-        key_management_prompt();
-        std::cin >> input;
-        std::cout << std::endl;
-        goto key_management_process;
+    else if (arg_values[1] == "keypair")
+    {
+        // Check for --help flag
 
-    key_operations_loop:
-        key_operations_prompt();
-        std::cin >> input;
-        std::cout << std::endl;
-        goto key_operations_process;
-    // ]
+        if (arg_count == 2 || arg_values[2] == "--help")
+        {
+            display_keypair_help_prompt();
+            return 0;
+        }
 
-    // Input processors
-    // [
-    category_process:
-        if (input == 0) goto exit;
-        if (input == 1) goto key_management_loop;
-        if (input == 2) goto key_operations_loop;
-        invalid_prompt();
-        goto category_loop;
+        // generate DIR_PATH
 
-    key_management_process:
-        if (input == 0) goto category_loop;
-        invalid_prompt();
-        goto key_management_loop;
-    
-    key_operations_process:
-        if (input == 0) goto category_loop;
-        invalid_prompt();
-        goto key_operations_loop;
-    // ]
+        else if (arg_values[2] == "generate")
+        {
 
-    exit:
-        exit_prompt();
-        return 1;
+        }
+
+        // delete KEY_PATH
+
+        else if (arg_values[2] == "delete")
+        {
+
+        }
+
+        // encrypt KEY_PATH TEXT
+
+        else if (arg_values[2] == "encrypt")
+        {
+
+        }
+
+        // decrypt KEY_PATH TEXT
+
+        else if (arg_values[2] == "decrypt")
+        {
+
+        }
+
+        // sign KEY_PATH MESSAGE
+
+        else if (arg_values[2] == "sign")
+        {
+
+        }
+
+        // incorrect input
+
+        else
+        {
+            std::cout << "iris keypair '" << arg_values[2] << "' is not an iris command. See 'iris keypair --help'." << std::endl;
+            return 1;
+        }
+    }
+
+    // identity
+
+    else if (arg_values[1] == "identity")
+    {
+        // Check for --help flag
+
+        if (arg_count == 2 || arg_values[2] == "--help")
+        {
+            display_identity_help_prompt();
+            return 0;
+        }
+
+        // add KEY_PATH KEY_TEXT
+
+        else if (arg_values[2] == "add")
+        {
+
+        }
+
+        // remove KEY_PATH
+
+        else if (arg_values[2] == "remove")
+        {
+
+        }
+
+        // list KEY_DIR
+
+        else if (arg_values[2] == "list")
+        {
+
+        }
+
+        // verify_signature KEY_PATH SIGNATURE MESSAGE_HASH
+
+        else if (arg_values[2] == "verify_signature")
+        {
+
+        }
+
+        // incorrect input
+
+        else
+        {
+            std::cout << "iris identity '" << arg_values[2] << "' is not an iris command. See 'iris identity --help'." << std::endl;
+        }
+    }
+
+    // escrow
+
+    else if (arg_values[1] == "escrow")
+    {
+        // Check for --help flag
+
+        if (arg_count == 2 || arg_values[2] == "--help")
+        {
+            display_escrow_help_prompt();
+            return 0;
+        }
+
+        // request TYPE TRUSTED_IDENTITY_KEY_PATH
+
+        else if (arg_values[2] == "request")
+        {
+
+        }
+
+        // generate TYPE KEY_PATH
+
+        else if (arg_values[2] == "generate")
+        {
+
+        }
+
+        // process TYPE TRUSTED_IDENTITY_KEY_PATH
+
+        else if (arg_values[2] == "process")
+        {
+
+        }
+
+        // incorrect input
+
+        else
+        {
+            std::cout << "iris escrow '" << arg_values[2] << "' is not an iris command. See 'iris escrow --help'." << std::endl;
+        }
+    }
+
+    // onion
+ 
+    else if (arg_values[1] == "onion")
+    {
+        // Check for --help flag
+
+        if (arg_count == 2 || arg_values[2] == "--help")
+        {
+            display_identity_help_prompt();
+            return 0;
+        }
+
+        // create TYPE [IDENTITY_KEY_PATH_ARRAY] TEXT
+
+        else if (arg_values[2] == "process")
+        {
+
+        }
+
+        // decrypt TYPE KEY_PATH
+
+        else if (arg_values[2] == "process")
+        {
+
+        }
+
+        // incorrect input
+
+        else
+        {
+            std::cout << "iris onion '" << arg_values[2] << "' is not an iris command. See 'iris onion --help'." << std::endl;
+        }
+    }
+
+    // incorrect input
+
+    else
+    {
+        std::cout << "iris '" << arg_values[1] << "' is not an iris command. See 'iris --help'." << std::endl;
+    }
+
+    return 1;
 }
