@@ -99,5 +99,19 @@ int main()
         return 1;
     }
 
+    std::string input = "";
+
+    for (int z = 10; z <= 1000; z += 10)
+    {
+        input += "zzzzzzzzzz";
+
+        std::cout << "\rAttempting " << z << " characters into encrypt method" << std::flush;
+        ecc.set_raw_plaintext(input);
+        ecc.encrypt();
+        // std::cout << '\r' << ecc.get_encoded_ciphertext_hash();
+    }
+
+    std::cout << std::endl;
+
     return 0;
 }
