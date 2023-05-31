@@ -11,9 +11,10 @@ fi
 # Build require dirs
 
 BUILD_DIR="/root/iris/build"
-DATA_DIR="$BUILD_DIR/data"
-mkdir -p $BUILD_DIR
-mkdir $DATA_DIR
+KEYS_DIR="$BUILD_DIR/keys"
+IDENTITIES_DIR="$BUILD_DIR/identities"
+mkdir $KEYS_DIR
+mkdir $IDENTITIES_DIR
 
 # Define platform specific bins
 
