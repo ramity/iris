@@ -10,8 +10,7 @@ fi
 
 # Build require dirs
 
-UNIX_TIME=$(date +%s)
-BUILD_DIR="/root/iris/build/$UNIX_TIME"
+BUILD_DIR="/root/iris/build"
 DATA_DIR="$BUILD_DIR/data"
 mkdir -p $BUILD_DIR
 mkdir $DATA_DIR
