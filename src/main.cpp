@@ -1,5 +1,8 @@
 #include <iostream>
 #include <cstring>
+#include <cstdio>
+
+#include "crypto/ECC.cpp"
 
 void cout_repo_ad()
 {
@@ -45,11 +48,43 @@ void cout_keypair_help_prompt()
     std::cout << "Keypair related operations" << std::endl;
     std::cout << std::endl;
     std::cout << "Commands:" << std::endl;
-    std::cout << "  generate DIR_PATH" << std::endl;
-    std::cout << "  delete KEY_PATH" << std::endl;
-    std::cout << "  encrypt KEY_PATH TEXT" << std::endl;
-    std::cout << "  decrypt KEY_PATH TEXT" << std::endl;
-    std::cout << "  sign KEY_PATH MESSAGE" << std::endl;
+    std::cout << "  generate" << std::endl;
+    std::cout << "  - named parameters:" << std::endl;
+    std::cout << "    --private_key_path" << std::endl;
+    std::cout << "    --public_key_path" << std::endl;
+    std::cout << "    --seed" << std::endl;
+    std::cout << "  - ordered parameters:" << std::endl;
+    std::cout << "    private_key_path" << std::endl;
+    std::cout << "    public_key_path" << std::endl;
+    std::cout << "    seed" << std::endl;
+    std::cout << "  delete" << std::endl;
+    std::cout << "  - named parameters:" << std::endl;
+    std::cout << "    --private_key_path" << std::endl;
+    std::cout << "    --public_key_path" << std::endl;
+    std::cout << "  - ordered parameters:" << std::endl;
+    std::cout << "    private_key_path" << std::endl;
+    std::cout << "    public_key_path" << std::endl;
+    std::cout << "  encrypt" << std::endl;
+    std::cout << "  - named parameters:" << std::endl;
+    std::cout << "    --public_key_path" << std::endl;
+    std::cout << "    --text" << std::endl;
+    std::cout << "  - ordered parameters:" << std::endl;
+    std::cout << "    public_key_path" << std::endl;
+    std::cout << "    text" << std::endl;
+    std::cout << "  decrypt" << std::endl;
+    std::cout << "  - named parameters:" << std::endl;
+    std::cout << "    --private_key_path" << std::endl;
+    std::cout << "    --ciphertext" << std::endl;
+    std::cout << "  - ordered parameters:" << std::endl;
+    std::cout << "    private_key_path" << std::endl;
+    std::cout << "    ciphertext" << std::endl;
+    std::cout << "  sign" << std::endl;
+    std::cout << "  - named parameters:" << std::endl;
+    std::cout << "    --private_key_path" << std::endl;
+    std::cout << "    --text" << std::endl;
+    std::cout << "  - ordered parameters:" << std::endl;
+    std::cout << "    private_key_path" << std::endl;
+    std::cout << "    text" << std::endl;
     std::cout << std::endl;
     cout_repo_ad();
 }
@@ -124,25 +159,181 @@ int main(int arg_count, char * arg_values[])
             return 0;
         }
 
-        // generate DIR_PATH
+        // generate
+        // - named parameters:
+        //   --private_key_path
+        //   --public_key_path
+        //   --seed
+        // - ordered parameters:
+        //   private_key_path
+        //   public_key_path
+        //   seed
 
         else if (strcmp(arg_values[2], "generate") == 0)
         {
+            // Possible params
+            std::string private_key_path;
+            std::string public_key_path;
+            std::string seed;
 
+            // Check named params:
+            for (int z = 3; z < arg_count; z++)
+            {
+                std::string parameter = arg_values[z];
+
+                if(parameter.find("--private_key_path=") == 0)
+                {
+                    private_key_path = parameter.substr(19);
+                }
+                else if(parameter.find("--public_key_path=") == 0)
+                {
+                    public_key_path = parameter.substr(18);
+                }
+                else if(parameter.find("--seed=") == 0)
+                {
+                    seed = parameter.substr(7);
+                }
+            }
+
+            // Check ordered params w/ precedence to named params:
+            if (private_key_path.empty() && arg_count >= 3)
+            {
+                private_key_path = arg_values[3];
+            }
+            if (public_key_path.empty() && arg_count >= 4)
+            {
+                public_key_path = arg_values[4];
+            }
+            if (seed.empty() && arg_count >= 5)
+            {
+                seed = arg_values[5];
+            }
+
+            // Conditionally perform ops
+            ECC ecc = ECC();
+            if (!private_key_path.empty())
+                ecc.set_private_key_path(private_key_path);
+            if (!public_key_path.empty())
+                ecc.set_public_key_path(public_key_path);
+            if (!seed.empty())
+                ecc.set_seed(seed);
+            ecc.generate_keys();
+            ecc.write_keys();
         }
 
-        // delete KEY_PATH
+        // delete
+        // - named parameters:
+        //   --private_key_path
+        //   --public_key_path
+        // - ordered parameters:
+        //   private_key_path
+        //   public_key_path
 
         else if (strcmp(arg_values[2], "delete") == 0)
         {
+            // Possible params
+            std::string private_key_path;
+            std::string public_key_path;
 
+            // Check named params:
+            for (int z = 3; z < arg_count; z++)
+            {
+                std::string parameter = arg_values[z];
+
+                if(parameter.find("--private_key_path=") == 0)
+                {
+                    private_key_path = parameter.substr(19);
+                }
+                else if(parameter.find("--public_key_path=") == 0)
+                {
+                    public_key_path = parameter.substr(18);
+                }
+            }
+
+            // Check ordered params w/ precedence to named params:
+            if (private_key_path.empty() && arg_count >= 3)
+            {
+                private_key_path = arg_values[3];
+            }
+            if (public_key_path.empty() && arg_count >= 4)
+            {
+                public_key_path = arg_values[4];
+            }
+
+            // Conditionally perform ops
+            if (!private_key_path.empty())
+            {
+                if (std::remove(private_key_path.c_str())
+                {
+                    std::cout << "Successfully removed " << private_key_path << std::endl;
+                }
+                else
+                {
+                    std::cout << "Failed to remove " << private_key_path << std::endl;
+                }
+            }
+            if (!public_key_path.empty())
+            {
+                if (std::remove(public_key_path.c_str())
+                {
+                    std::cout << "Successfully removed " << public_key_path << std::endl;
+                }
+                else
+                {
+                    std::cout << "Failed to remove " << public_key_path << std::endl;
+                }
+            }
         }
 
-        // encrypt KEY_PATH TEXT
+        // encrypt
+        // - named parameters:
+        //   --public_key_path
+        //   --text
+        // - ordered parameters:
+        //   public_key_path
+        //   text
 
         else if (strcmp(arg_values[2], "encrypt") == 0)
         {
+            // Possible params
+            std::string public_key_path;
+            std::string text;
 
+            // Check named params:
+            for (int z = 3; z < arg_count; z++)
+            {
+                std::string parameter = arg_values[z];
+
+                if(parameter.find("--public_key_path=") == 0)
+                {
+                    public_key_path = parameter.substr(18);
+                }
+                else if(parameter.find("--text=") == 0)
+                {
+                    text = parameter.substr(7);
+                }
+            }
+
+            // Check ordered params w/ precedence to named params:
+            if (public_key_path.empty() && arg_count >= 3)
+            {
+                public_key_path = arg_values[3];
+            }
+            if (text.empty() && arg_count >= 4)
+            {
+                text = arg_values[4];
+            }
+
+            // Conditionally perform ops
+            if (!public_key_path.empty() && !text.empty())
+            {
+                // ISSUE #14 - Support just reading the public key for encryption
+                // ECC ecc = ECC();
+                // ecc.set_public_key_path(public_key_path);
+                // ecc.set_raw_plaintext(text);
+                // ecc.encrypt();
+                // std::cout << ecc.get_raw_ciphertext() << std::endl;
+            }
         }
 
         // decrypt KEY_PATH TEXT
