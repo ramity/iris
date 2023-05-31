@@ -103,6 +103,7 @@ void cout_identity_help_prompt()
     std::cout << "Description: Identity related operations" << std::endl;
     std::cout << std::endl;
     std::cout << "Commands:" << std::endl;
+    std::cout << std::endl;
     std::cout << "  add KEY_PATH KEY_TEXT" << std::endl;
     std::cout << "  remove KEY_PATH" << std::endl;
     std::cout << "  list KEY_DIR" << std::endl;
@@ -120,6 +121,7 @@ void cout_escrow_help_prompt()
     std::cout << "Description: Perform or request operations from a trusted third party" << std::endl;
     std::cout << std::endl;
     std::cout << "Commands:" << std::endl;
+    std::cout << std::endl;
     std::cout << "  request TYPE TRUSTED_IDENTITY_KEY_PATH" << std::endl;
     std::cout << "  generate TYPE KEY_PATH" << std::endl;
     std::cout << "  process TYPE TRUSTED_IDENTITY_KEY_PATH" << std::endl;
@@ -136,6 +138,7 @@ void cout_onion_help_prompt()
     std::cout << "Description: A special message type that requires group cooperation to open" << std::endl;
     std::cout << std::endl;
     std::cout << "Commands:" << std::endl;
+    std::cout << std::endl;
     std::cout << "  create TYPE [IDENTITY_KEY_PATH_ARRAY] TEXT" << std::endl;
     std::cout << "  decrypt TYPE KEY_PATH" << std::endl;
     std::cout << std::endl;
