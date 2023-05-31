@@ -57,6 +57,7 @@ void cout_keypair_help_prompt()
     std::cout << "    private_key_path" << std::endl;
     std::cout << "    public_key_path" << std::endl;
     std::cout << "    seed" << std::endl;
+    std::cout << std::endl;
     std::cout << "  delete" << std::endl;
     std::cout << "  - named parameters:" << std::endl;
     std::cout << "    --private_key_path" << std::endl;
@@ -64,6 +65,7 @@ void cout_keypair_help_prompt()
     std::cout << "  - ordered parameters:" << std::endl;
     std::cout << "    private_key_path" << std::endl;
     std::cout << "    public_key_path" << std::endl;
+    std::cout << std::endl;
     std::cout << "  encrypt" << std::endl;
     std::cout << "  - named parameters:" << std::endl;
     std::cout << "    --public_key_path" << std::endl;
@@ -71,6 +73,7 @@ void cout_keypair_help_prompt()
     std::cout << "  - ordered parameters:" << std::endl;
     std::cout << "    public_key_path" << std::endl;
     std::cout << "    text" << std::endl;
+    std::cout << std::endl;
     std::cout << "  decrypt" << std::endl;
     std::cout << "  - named parameters:" << std::endl;
     std::cout << "    --private_key_path" << std::endl;
@@ -78,6 +81,7 @@ void cout_keypair_help_prompt()
     std::cout << "  - ordered parameters:" << std::endl;
     std::cout << "    private_key_path" << std::endl;
     std::cout << "    ciphertext" << std::endl;
+    std::cout << std::endl;
     std::cout << "  sign" << std::endl;
     std::cout << "  - named parameters:" << std::endl;
     std::cout << "    --private_key_path" << std::endl;
