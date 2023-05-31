@@ -263,7 +263,7 @@ int main(int arg_count, char * arg_values[])
             // Conditionally perform ops
             if (!private_key_path.empty())
             {
-                if (std::remove(private_key_path.c_str())
+                if (std::remove(private_key_path.c_str()))
                 {
                     std::cout << "Successfully removed " << private_key_path << std::endl;
                 }
@@ -274,7 +274,7 @@ int main(int arg_count, char * arg_values[])
             }
             if (!public_key_path.empty())
             {
-                if (std::remove(public_key_path.c_str())
+                if (std::remove(public_key_path.c_str()))
                 {
                     std::cout << "Successfully removed " << public_key_path << std::endl;
                 }
