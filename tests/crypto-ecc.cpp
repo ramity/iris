@@ -31,7 +31,7 @@ int main()
     ECC ecc = ECC();
     ecc.set_public_key_path(public_key_path);
     ecc.set_private_key_path(private_key_path);
-    ecc.generate_keys();
+    ecc.generate_keypair();
     ecc.set_raw_plaintext(message);
 
     // Make sure decryptoed output == message
@@ -52,11 +52,11 @@ int main()
     }
 
     // Write keys, create new ECC instance, read keys, transfer raw ciphertext, decrypt, check if raw_plaintexts match 
-    ecc.write_keys();
+    ecc.write_keypair();
     ECC ecc2 = ECC();
     ecc2.set_public_key_path(public_key_path);
     ecc2.set_private_key_path(private_key_path);
-    ecc2.read_keys();
+    ecc2.read_keypair();
     ecc2.set_raw_ciphertext(ecc.get_raw_ciphertext());
     ecc2.decrypt();
     if (ecc.get_raw_plaintext() != ecc2.get_raw_plaintext())
@@ -69,10 +69,10 @@ int main()
     std::string seed = "Unlimited games but no games";
     ECC ecc3 = ECC();
     ecc3.set_seed(seed);
-    ecc3.generate_keys();
+    ecc3.generate_keypair();
     ECC ecc4 = ECC();
     ecc4.set_seed(seed);
-    ecc4.generate_keys();
+    ecc4.generate_keypair();
 
     std::cout << ecc3.get_encoded_public_key() << std::endl << std::endl;
     std::cout << ecc4.get_encoded_public_key() << std::endl << std::endl;
@@ -87,8 +87,8 @@ int main()
     seed = ecc.hash(seed);
     ecc3.set_seed(seed);
     ecc4.set_seed(seed);
-    ecc3.generate_keys();
-    ecc4.generate_keys();
+    ecc3.generate_keypair();
+    ecc4.generate_keypair();
 
     std::cout << ecc3.get_encoded_public_key() << std::endl << std::endl;
     std::cout << ecc4.get_encoded_public_key() << std::endl << std::endl;
@@ -98,10 +98,6 @@ int main()
         std::cout << "[-] Failed seeded key generation test" << std::endl;
         return 1;
     }
-
-    // Keep prompt open
-    std::cout << "Press Enter to exit...";
-    std::cin.get();
 
     return 0;
 }

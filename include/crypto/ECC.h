@@ -88,10 +88,19 @@ class ECC
     void set_private_key_path(std::string path);
 
     void set_seed(std::string seed);
-    void generate_keys();
-    void read_keys();
-    void write_keys();
-    void init_key_operations();
+    void generate_keypair();
+
+    void read_private_key();
+    void read_public_key();
+    void read_keypair();
+
+    void init_private_key_operations();
+    void init_public_key_operations();
+    void init_keypair_operations();
+
+    void write_private_key();
+    void write_public_key();
+    void write_keypair();
 
     void encrypt();
     void decrypt();

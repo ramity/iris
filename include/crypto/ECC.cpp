@@ -101,7 +101,7 @@ void ECC::set_seed(std::string seed)
     this->drng.SetKeyWithIV(key, key_size, iv, iv_size);
 }
 
-void ECC::generate_keys()
+void ECC::generate_keypair()
 {
     if (this->use_drng)
     {
@@ -113,50 +113,42 @@ void ECC::generate_keys()
     }
 
     this->private_key.MakePublicKey(this->public_key);
-    this->init_key_operations();
+    this->init_keypair_operations();
 }
 
-void ECC::read_keys()
+void ECC::read_private_key()
 {
-    std::ifstream private_file(this->private_key_path, std::ios::in | std::ios::binary);
-    CryptoPP::FileSource private_source(private_file, true);
-    this->private_key.Load(private_source);
+    this->output = "";
+    std::ifstream private_file(this->private_key_path);
+    CryptoPP::FileSource private_source(private_file, true, new CryptoPP::Redirector(this->decoder));
+    this->private_key.Load(CryptoPP::StringSource(this->output, true).Ref());
     private_file.close();
 
-    std::ifstream public_file(this->public_key_path, std::ios::in | std::ios::binary);
-    CryptoPP::FileSource public_source(public_file, true);
-    this->public_key.Load(public_source);
-    public_file.close();
-
-    this->init_key_operations();
+    this->init_private_key_operations();
 }
 
-void ECC::write_keys()
+void ECC::read_public_key()
 {
-    std::ofstream private_file(this->private_key_path, std::ios::out | std::ios::binary);
-    CryptoPP::FileSink private_sink(private_file);
-    this->private_key.Save(private_sink);
-    private_file.close();
-
-    // Save the public key to a file
-    std::ofstream public_file(this->public_key_path, std::ios::out | std::ios::binary);
-    CryptoPP::FileSink public_sink(public_file);
-    this->public_key.Save(public_sink);
+    this->output = "";
+    std::ifstream public_file(this->public_key_path);
+    CryptoPP::FileSource public_source(public_file, true, new CryptoPP::Redirector(this->decoder));
+    this->public_key.Load(CryptoPP::StringSource(this->output, true).Ref());
     public_file.close();
+
+    this->init_public_key_operations();
 }
 
-void ECC::init_key_operations()
+void ECC::read_keypair()
 {
-    this->encryptor = new CryptoPP::ECIES<CryptoPP::ECP>::Encryptor(this->public_key);
+    this->read_private_key();
+    this->read_public_key();
+}
+
+void ECC::init_private_key_operations()
+{
     this->decryptor = new CryptoPP::ECIES<CryptoPP::ECP>::Decryptor(this->private_key);
     this->signer = new CryptoPP::ECDSA<CryptoPP::ECP, CryptoPP::SHA512>::Signer(this->private_key);
-    this->verifier = new CryptoPP::ECDSA<CryptoPP::ECP, CryptoPP::SHA512>::Verifier(this->public_key);
 
-    this->encryptor_filter = new CryptoPP::PK_EncryptorFilter(
-        this->prng,
-        *this->encryptor,
-        new CryptoPP::Redirector(this->output_sink)
-    );
     this->decryptor_filter = new CryptoPP::PK_DecryptorFilter(
         this->prng,
         *this->decryptor,
@@ -165,6 +157,26 @@ void ECC::init_key_operations()
     this->signer_filter = new CryptoPP::SignerFilter(
         this->prng,
         *this->signer,
+        new CryptoPP::Redirector(this->output_sink)
+    );
+
+    // Convert private_key to all private_key variants
+    this->output = "";
+    private_key.Save(this->output_sink);
+    this->raw_private_key = this->output;
+    this->encoded_private_key = this->encode(this->raw_private_key);
+    this->raw_private_key_hash = this->hash(this->raw_private_key);
+    this->encoded_private_key_hash = this->encode(this->raw_private_key_hash);
+}
+
+void ECC::init_public_key_operations()
+{
+    this->encryptor = new CryptoPP::ECIES<CryptoPP::ECP>::Encryptor(this->public_key);
+    this->verifier = new CryptoPP::ECDSA<CryptoPP::ECP, CryptoPP::SHA512>::Verifier(this->public_key);
+
+    this->encryptor_filter = new CryptoPP::PK_EncryptorFilter(
+        this->prng,
+        *this->encryptor,
         new CryptoPP::Redirector(this->output_sink)
     );
     this->verifier_filter = new CryptoPP::SignatureVerificationFilter(
@@ -178,14 +190,38 @@ void ECC::init_key_operations()
     this->encoded_public_key = this->encode(this->raw_public_key);
     this->raw_public_key_hash = this->hash(this->raw_public_key);
     this->encoded_public_key_hash = this->encode(this->raw_public_key_hash);
+}
 
-    // Convert private_key to all private_key variants
-    this->output = "";
-    private_key.Save(this->output_sink);
-    this->raw_private_key = this->output;
-    this->encoded_private_key = this->encode(this->raw_private_key);
-    this->raw_private_key_hash = this->hash(this->raw_private_key);
-    this->encoded_private_key_hash = this->encode(this->raw_private_key_hash);
+void ECC::init_keypair_operations()
+{
+    this->init_private_key_operations();
+    this->init_public_key_operations();
+}
+
+void ECC::write_private_key()
+{
+    std::ofstream private_file(this->private_key_path);
+    CryptoPP::FileSink private_sink(private_file);
+    CryptoPP::Base64Encoder temp_base64_private_key_encoder(new CryptoPP::Redirector(private_sink));
+    this->private_key.Save(temp_base64_private_key_encoder);
+    temp_base64_private_key_encoder.MessageEnd();
+    private_file.close();
+}
+
+void ECC::write_public_key()
+{
+    std::ofstream public_file(this->public_key_path);
+    CryptoPP::FileSink public_sink(public_file);
+    CryptoPP::Base64Encoder temp_base64_public_key_encoder(new CryptoPP::Redirector(public_sink));
+    this->public_key.Save(temp_base64_public_key_encoder);
+    temp_base64_public_key_encoder.MessageEnd();
+    public_file.close();
+}
+
+void ECC::write_keypair()
+{
+    this->write_private_key();
+    this->write_public_key();
 }
 
 void ECC::encrypt()
