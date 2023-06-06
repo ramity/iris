@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstring>
 #include <cstdio>
-#include<string>
+#include <string>
 
 #include "crypto/ECC.cpp"
 
@@ -274,8 +274,8 @@ int main(int arg_count, char * arg_values[])
                 }
                 ecc.set_seed(seed);
             }
-            ecc.generate_keys();
-            ecc.write_keys();
+            ecc.generate_keypair();
+            ecc.write_keypair();
         }
 
         // delete
@@ -319,7 +319,7 @@ int main(int arg_count, char * arg_values[])
             // Conditionally perform ops
             if (!private_key_path.empty())
             {
-                if (std::remove(private_key_path.c_str()))
+                if (remove(private_key_path.c_str()) == 0)
                 {
                     std::cout << "Successfully removed " << private_key_path << std::endl;
                 }
@@ -330,7 +330,7 @@ int main(int arg_count, char * arg_values[])
             }
             if (!public_key_path.empty())
             {
-                if (std::remove(public_key_path.c_str()))
+                if (remove(public_key_path.c_str()) == 0)
                 {
                     std::cout << "Successfully removed " << public_key_path << std::endl;
                 }
