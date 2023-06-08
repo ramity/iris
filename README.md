@@ -1,6 +1,6 @@
 <h1 align="center">IRIS</h1>
 
-![splash](docs/splash.png)
+![splash](assets/splash.png)
 
 > Project currently work in progress
 

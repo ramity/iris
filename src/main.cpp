@@ -32,6 +32,7 @@ void cout_repo_ad()
 
 void cout_iris_ascii_art()
 {
+    std::cout << std::endl;
     std::cout << "::::::::::: :::::::::  ::::::::::: :::::::: " << std::endl;
     std::cout << "    :+:     :+:    :+:     :+:    :+:    :+:" << std::endl;
     std::cout << "    +:+     +:+    +:+     +:+    +:+       " << std::endl;
@@ -213,6 +214,15 @@ int main(int arg_count, char * arg_values[])
         //   n
         else if (strcmp(arg_values[2], "generate") == 0)
         {
+            // Missing args
+            if (arg_count == 3)
+            {
+                std::cout << std::endl;
+                std::cout << "ERROR: Missing named/ordered parameters" << std::endl;
+                cout_keypair_help_prompt();
+                return 0;
+            }
+
             // Possible params
             std::string private_key_path;
             std::string public_key_path;
@@ -287,6 +297,15 @@ int main(int arg_count, char * arg_values[])
         //   public_key_path
         else if (strcmp(arg_values[2], "delete") == 0)
         {
+            // Missing args
+            if (arg_count == 3)
+            {
+                std::cout << std::endl;
+                std::cout << "ERROR: Missing named/ordered parameters" << std::endl;
+                cout_keypair_help_prompt();
+                return 0;
+            }
+
             // Possible params
             std::string private_key_path;
             std::string public_key_path;
@@ -350,6 +369,15 @@ int main(int arg_count, char * arg_values[])
         //   text
         else if (strcmp(arg_values[2], "encrypt") == 0)
         {
+            // Missing args
+            if (arg_count == 3)
+            {
+                std::cout << std::endl;
+                std::cout << "ERROR: Missing named/ordered parameters" << std::endl;
+                cout_keypair_help_prompt();
+                return 0;
+            }
+
             // Possible params
             std::string public_key_path;
             std::string text;
@@ -382,25 +410,131 @@ int main(int arg_count, char * arg_values[])
             // Conditionally perform ops
             if (!public_key_path.empty() && !text.empty())
             {
-                // ISSUE #14 - Support just reading the public key for encryption
-                // ECC ecc = ECC();
-                // ecc.set_public_key_path(public_key_path);
-                // ecc.set_raw_plaintext(text);
-                // ecc.encrypt();
-                // std::cout << ecc.get_raw_ciphertext() << std::endl;
+                ECC ecc = ECC();
+                ecc.set_public_key_path(public_key_path);
+                ecc.set_raw_plaintext(text);
+                ecc.encrypt();
+                std::cout << ecc.get_encoded_ciphertext() << std::endl;
             }
         }
 
-        // decrypt KEY_PATH TEXT
+        // decrypt
+        // - named parameters:
+        //   --private_key_path
+        //   --ciphertext
+        // - ordered parameters:
+        //   private_key_path
+        //   text
         else if (strcmp(arg_values[2], "decrypt") == 0)
         {
+            // Missing args
+            if (arg_count == 3)
+            {
+                std::cout << std::endl;
+                std::cout << "ERROR: Missing named/ordered parameters" << std::endl;
+                cout_keypair_help_prompt();
+                return 0;
+            }
 
+            // Possible params
+            std::string private_key_path;
+            std::string ciphertext;
+
+            // Check named params:
+            for (int z = 3; z < arg_count; z++)
+            {
+                std::string parameter = arg_values[z];
+
+                if(parameter.find("--private_key_path=") == 0)
+                {
+                    private_key_path = parameter.substr(19);
+                }
+                else if(parameter.find("--ciphertext=") == 0)
+                {
+                    ciphertext = parameter.substr(13);
+                }
+            }
+
+            // Check ordered params w/ precedence to named params:
+            if (private_key_path.empty() && arg_count >= 3)
+            {
+                private_key_path = arg_values[3];
+            }
+            if (ciphertext.empty() && arg_count >= 4)
+            {
+                ciphertext = arg_values[4];
+            }
+
+            // Conditionally perform ops
+            if (!private_key_path.empty() && !ciphertext.empty())
+            {
+                ECC ecc = ECC();
+                ecc.set_private_key_path(private_key_path);
+                std::string raw_ciphertext = ecc.decode(ciphertext);
+                ecc.set_raw_ciphertext(raw_ciphertext);
+                ecc.decrypt();
+                std::cout << ecc.get_raw_plaintext() << std::endl;
+            }
         }
 
-        // sign KEY_PATH MESSAGE
+        // sign
+        // - named parameters:
+        //   --private_key_path
+        //   --text
+        // - ordered parameters:
+        //   private_key_path
+        //   text
         else if (strcmp(arg_values[2], "sign") == 0)
         {
+            // Missing args
+            if (arg_count == 3)
+            {
+                std::cout << std::endl;
+                std::cout << "ERROR: Missing named/ordered parameters" << std::endl;
+                cout_keypair_help_prompt();
+                return 0;
+            }
 
+            // Possible params
+            std::string private_key_path;
+            std::string text;
+
+            // Check named params:
+            for (int z = 3; z < arg_count; z++)
+            {
+                std::string parameter = arg_values[z];
+
+                if(parameter.find("--private_key_path=") == 0)
+                {
+                    private_key_path = parameter.substr(19);
+                }
+                else if(parameter.find("--text=") == 0)
+                {
+                    text = parameter.substr(7);
+                }
+            }
+
+            // Check ordered params w/ precedence to named params:
+            if (private_key_path.empty() && arg_count >= 3)
+            {
+                private_key_path = arg_values[3];
+            }
+            if (text.empty() && arg_count >= 4)
+            {
+                text = arg_values[4];
+            }
+
+            // Conditionally perform ops
+            if (!private_key_path.empty() && !text.empty())
+            {
+                ECC ecc = ECC();
+                ecc.set_private_key_path(private_key_path);
+                std::string text_hash = ecc.hash(text);
+                ecc.set_raw_plaintext_hash(text_hash);
+                ecc.sign();
+                std::cout << text_hash << std::endl;
+                std::cout << ecc.get_encoded_signature() << std::endl;
+            }
         }
 
         // incorrect input
@@ -424,25 +558,53 @@ int main(int arg_count, char * arg_values[])
         // add KEY_PATH KEY_TEXT
         else if (strcmp(arg_values[2], "add") == 0)
         {
-
+            // Missing args
+            if (arg_count == 3)
+            {
+                std::cout << std::endl;
+                std::cout << "ERROR: Missing named/ordered parameters" << std::endl;
+                cout_keypair_help_prompt();
+                return 0;
+            }
         }
 
         // remove KEY_PATH
         else if (strcmp(arg_values[2], "remove") == 0)
         {
-
+            // Missing args
+            if (arg_count == 3)
+            {
+                std::cout << std::endl;
+                std::cout << "ERROR: Missing named/ordered parameters" << std::endl;
+                cout_keypair_help_prompt();
+                return 0;
+            }
         }
 
         // list KEY_DIR
         else if (strcmp(arg_values[2], "list") == 0)
         {
-
+            // Missing args
+            if (arg_count == 3)
+            {
+                std::cout << std::endl;
+                std::cout << "ERROR: Missing named/ordered parameters" << std::endl;
+                cout_keypair_help_prompt();
+                return 0;
+            }
         }
 
         // verify_signature KEY_PATH SIGNATURE MESSAGE_HASH
         else if (strcmp(arg_values[2], "verify_signature") == 0)
         {
-
+            // Missing args
+            if (arg_count == 3)
+            {
+                std::cout << std::endl;
+                std::cout << "ERROR: Missing named/ordered parameters" << std::endl;
+                cout_keypair_help_prompt();
+                return 0;
+            }
         }
 
         // incorrect input
@@ -465,19 +627,40 @@ int main(int arg_count, char * arg_values[])
         // request TYPE TRUSTED_IDENTITY_KEY_PATH
         else if (strcmp(arg_values[2], "request") == 0)
         {
-
+            // Missing args
+            if (arg_count == 3)
+            {
+                std::cout << std::endl;
+                std::cout << "ERROR: Missing named/ordered parameters" << std::endl;
+                cout_keypair_help_prompt();
+                return 0;
+            }
         }
 
         // generate TYPE KEY_PATH
         else if (strcmp(arg_values[2], "generate") == 0)
         {
-
+            // Missing args
+            if (arg_count == 3)
+            {
+                std::cout << std::endl;
+                std::cout << "ERROR: Missing named/ordered parameters" << std::endl;
+                cout_keypair_help_prompt();
+                return 0;
+            }
         }
 
         // process TYPE TRUSTED_IDENTITY_KEY_PATH
         else if (strcmp(arg_values[2], "process") == 0)
         {
-
+            // Missing args
+            if (arg_count == 3)
+            {
+                std::cout << std::endl;
+                std::cout << "ERROR: Missing named/ordered parameters" << std::endl;
+                cout_keypair_help_prompt();
+                return 0;
+            }
         }
 
         // incorrect input
@@ -498,15 +681,29 @@ int main(int arg_count, char * arg_values[])
         }
 
         // create TYPE [IDENTITY_KEY_PATH_ARRAY] TEXT
-        else if (strcmp(arg_values[2], "process") == 0)
+        else if (strcmp(arg_values[2], "create") == 0)
         {
-
+            // Missing args
+            if (arg_count == 3)
+            {
+                std::cout << std::endl;
+                std::cout << "ERROR: Missing named/ordered parameters" << std::endl;
+                cout_keypair_help_prompt();
+                return 0;
+            }
         }
 
         // decrypt TYPE KEY_PATH
-        else if (strcmp(arg_values[2], "process") == 0)
+        else if (strcmp(arg_values[2], "decrypt") == 0)
         {
-
+            // Missing args
+            if (arg_count == 3)
+            {
+                std::cout << std::endl;
+                std::cout << "ERROR: Missing named/ordered parameters" << std::endl;
+                cout_keypair_help_prompt();
+                return 0;
+            }
         }
 
         // incorrect input
