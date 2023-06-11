@@ -26,12 +26,7 @@
 - Generation
 - Distribution
 - Storage
-- Rotation
-- Revocation
-- Expiration
-- Escrow
 - Destruction
-- Shared secrets
 
 ## Key operations
 - Encryption
