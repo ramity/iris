@@ -324,7 +324,6 @@ int main(int arg_count, char * arg_values[])
                 for (int z = 0; z < n; z++)
                 {
                     seed = ecc.hash(seed);
-                    std::cout << "!!!" << std::endl;
                 }
                 ecc.set_seed(seed);
             }
