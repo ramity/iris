@@ -32,6 +32,3 @@ fi
 make -f GNUmakefile PREFIX=$PREFIX distclean
 make -f GNUmakefile PREFIX=$PREFIX CXX=$CXX CXXFLAGS=$CXXFLAGS -j`nproc`
 make -f GNUmakefile PREFIX=$PREFIX CXX=$CXX CXXFLAGS=$CXXFLAGS -j`nproc` install
-
-# This may or may not be required. Rebuilding container + testing required
-# sudo ldconfig
