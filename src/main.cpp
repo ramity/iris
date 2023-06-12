@@ -138,7 +138,6 @@ void cout_identity_help_prompt()
     std::cout << "  - named parameters:" << std::endl;
     std::cout << "    --path" << std::endl;
     std::cout << "    --public_key" << std::endl;
-    std::cout << "    --n" << std::endl;
     std::cout << "  - ordered parameters:" << std::endl;
     std::cout << "    path" << std::endl;
     std::cout << "    public_key" << std::endl;
@@ -611,7 +610,6 @@ int main(int arg_count, char * arg_values[])
         // - named parameters:
         //   --path
         //   --public_key
-        //   --n
         // - ordered parameters:
         //   path
         //   public_key
