@@ -4,6 +4,94 @@
 
 > Project currently work in progress
 
+# ToC
+
+- [Quick start](#quick-start)
+- [Commands](#commands)
+- [Example usage](#example-usage)
+- [Rationale](#rationale)
+- [Planned design](#planned-design)
+- [Planned features](#planned-features)
+- [Key formats](#key-formats)
+- [Key management](#key-management)
+- [Key operations](#key-operations)
+- [Setting up dev environment](#setting-up-dev-environment)
+- [Compile cryptopp for both linux and windows](#compile-cryptopp-for-both-linux-and-windows)
+- [Compile iris for both linux and windows](#compile-iris-for-both-linux-and-windows)
+- [Run linux tests](#run-linux-tests)
+- [A note on deterministic keys](#a-note-on-deterministic-keys)
+
+# Quick start
+
+- Download and unzip latest release ([Linux](https://github.com/ramity/iris/releases/download/v0.1.0/linux-64.zip), [Windows](https://github.com/ramity/iris/releases/download/v0.1.0/windows-64.zip))
+- Execute compiled binary from CLI
+
+# Commands
+
+```
+iris --help
+iris keypair --help
+iris keypair generate [args]
+iris keypair delete [args]
+iris keypair encrypt [args]
+iris keypair decrypt [args]
+iris keypair sign [args]
+iris identity --help
+iris identity add [args]
+iris identity remove [args]
+iris identity list [args]
+iris identity verify [args]
+```
+
+# Example usage
+
+### Alice and Bob wish to communicate over an unsecure channel. The below details a user story featuring keypair generation and public key sharing using linux devices. The same can be accomplished on windows devices with variances (`./iris`->`iris.exe`, `cat`->`type`, etc).
+
+---
+
+Alice generates a keypair:
+```
+./iris keypair generate ./keys/private_key ./keys/public_key
+```
+
+Bob generates a keypair:
+```
+./iris keypair generate ./keys/private_key ./keys/public_key
+```
+
+Alice `cat`s her public key to the console, copies it, and shares it to Bob over an unsecure channel:
+
+```
+cat ./keys/public_key
+```
+> MIGbMBAGByqGSM49AgEGBSuBBAAjA4GGAAQBW9w/ObxNLQjObQ8XUVKF9kgk7NVlA+5SjItlL5ZuW1KR5GHForrGz244Xp1LG1/higCPCTD5DnjeIwX8EDNQunsBGOuR9BX1ldKdMJuOl9KufRRKuIFFOK4ihMum4sfHFV18BKxhlJkrqay6hqLnUvsRx/C32X7j70vLHxeRXhGAE4g=
+
+Bob adds Alice's public key to his iris instance:
+
+```
+./iris identity add ./identities/alice --public_key=MIGbMBAGByqGSM49AgEGBSuBBAAjA4GGAAQBW9w/ObxNLQjObQ8XUVKF9kgk7NVlA+5SjItlL5ZuW1KR5GHForrGz244Xp1LG1/higCPCTD5DnjeIwX8EDNQunsBGOuR9BX1ldKdMJuOl9KufRRKuIFFOK4ihMum4sfHFV18BKxhlJkrqay6hqLnUvsRx/C32X7j70vLHxeRXhGAE4g=
+```
+
+> File written successfully
+
+Bob `cat`s his public key to the console, copies it, and shares it to Alice over an unsecure channel:
+
+```
+cat ./keys/public_key
+```
+
+> MIGbMBAGByqGSM49AgEGBSuBBAAjA4GGAAQBUXSK3fQJoz460Rwb/l/opXIJI6Spa/nRYwYjnQbDqknGOexgjbxr+pivGkIH2VO41ONU+aDCMcJ+QM4t+NBrrpsAr4ewQFgNmk1kBa11A60sc35SRVfJqAccvF3mAbE+t8WAkBnioRA/xo3VngZPQyDs6NuNgJxQqIEzpCyYC9bVQVs=
+
+Alice adds Bob's public key to her iris instance:
+
+```
+./iris identity add ./identities/alice --public_key=MIGbMBAGByqGSM49AgEGBSuBBAAjA4GGAAQBUXSK3fQJoz460Rwb/l/opXIJI6Spa/nRYwYjnQbDqknGOexgjbxr+pivGkIH2VO41ONU+aDCMcJ+QM4t+NBrrpsAr4ewQFgNmk1kBa11A60sc35SRVfJqAccvF3mAbE+t8WAkBnioRA/xo3VngZPQyDs6NuNgJxQqIEzpCyYC9bVQVs
+```
+
+> File written successfully
+
+Alice and Bob can now utilize the saved identities to encrypt text, share ciphertexts, verify sign messages, etc.
+
 # Rationale
 
 - Create a tool for close friends and I to communicate securely over insecure channels.
@@ -43,14 +131,14 @@ docker compose up -d
 docker exec -it iris_dev bash
 ```
 
-## Compile cryptopp for both linux and windows platforms
+## Compile cryptopp for both linux and windows
 
 (Inside container)
 ```
 ./scripts/lib/compile-all-cryptopp.sh
 ```
 
-## Compile iris for both linux and windows platforms
+## Compile iris for both linux and windows
 
 (Inside container)
 ```
@@ -62,18 +150,6 @@ docker exec -it iris_dev bash
 (Inside container)
 ```
 ./scripts/test.sh
-```
-
-## Compile ecc test for windows environment
-
-(Inside container)
-```
-./scripts/w64-compile-ecc.sh
-```
-
-(Host computer - assuming windows environment)
-```
-./bin/win64-cc-test.exe
 ```
 
 ## A note on deterministic keys
