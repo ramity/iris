@@ -7,6 +7,7 @@
 #include "crypto/ECC.cpp"
 
 // Define globals
+int generation_difficulty = 133337;
 std::string program_name;
 char current_path_chars[FILENAME_MAX];
 std::string current_path;
@@ -321,10 +322,16 @@ int main(int arg_count, char * arg_values[])
                 ecc.set_public_key_path(public_key_path);
             if (!seed.empty())
             {
-                for (int z = 0; z < n; z++)
+                int rounds = n * generation_difficulty;
+                int step = rounds / 100;
+                for (int z = 0; z < rounds; z++)
                 {
                     seed = ecc.hash(seed);
+
+                    if (z % step == 0)
+                        std::cout << "\r" << z / step  << "%" << std::flush;
                 }
+                std::cout << "\rComplete" << std::endl;
                 ecc.set_seed(seed);
             }
             ecc.generate_keypair();
