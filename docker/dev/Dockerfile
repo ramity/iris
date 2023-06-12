@@ -15,6 +15,7 @@ RUN apt -y install mingw-w64
 # Add compile deps
 RUN apt -y install make
 RUN apt -y install git
+RUN apt -y install unzip zip
 
 # Keep container open
 ENTRYPOINT tail -f /dev/null
