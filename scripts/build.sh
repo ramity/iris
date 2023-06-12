@@ -1,4 +1,7 @@
-./scripts/clear_build.sh
+# Clear build dir
+
+BUILD_DIR="/root/iris/build/*"
+rm -r -d $BUILD_DIR
 
 # Define platform agnostic vars and conditionally exit if target does not exist
 
@@ -57,6 +60,11 @@ else
     echo -e "\033[31m[C] Failed\t$TGT->$W64_BIN\033[0m"
 fi
 
+# Create release zips
+
+zip -9 $BUILD_DIR/linux-64.zip -r $BUILD_DIR -x $W64_BIN -x "*.zip" -x ".gitkeep"
+zip -9 $BUILD_DIR/windows-64.zip -r $BUILD_DIR -x $L64_BIN -x "*.zip" -x ".gitkeep"
+
 # Prevent permission issues when testing from within the build dir
 
-chown -R 1000:1000 ./build/*
+chown -R 1000:1000 $BUILD_DIR/*
