@@ -462,6 +462,7 @@ int main(int arg_count, char * arg_values[])
             {
                 ECC ecc = ECC();
                 ecc.set_public_key_path(public_key_path);
+                ecc.read_public_key();
                 ecc.set_raw_plaintext(text);
                 ecc.encrypt();
                 std::cout << ecc.get_encoded_ciphertext() << std::endl;
@@ -520,6 +521,7 @@ int main(int arg_count, char * arg_values[])
             {
                 ECC ecc = ECC();
                 ecc.set_private_key_path(private_key_path);
+                ecc.read_private_key();
                 std::string raw_ciphertext = ecc.decode(ciphertext);
                 ecc.set_raw_ciphertext(raw_ciphertext);
                 ecc.decrypt();
@@ -579,6 +581,7 @@ int main(int arg_count, char * arg_values[])
             {
                 ECC ecc = ECC();
                 ecc.set_private_key_path(private_key_path);
+                ecc.read_private_key();
                 std::string text_hash = ecc.hash(ecc.hash(text));
                 ecc.set_raw_plaintext_hash(text_hash);
                 ecc.sign();
