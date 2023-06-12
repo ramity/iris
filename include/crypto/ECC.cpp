@@ -202,7 +202,7 @@ void ECC::write_private_key()
 {
     std::ofstream private_file(this->private_key_path);
     CryptoPP::FileSink private_sink(private_file);
-    CryptoPP::Base64Encoder temp_base64_private_key_encoder(new CryptoPP::Redirector(private_sink));
+    CryptoPP::Base64Encoder temp_base64_private_key_encoder(new CryptoPP::Redirector(private_sink), true, 132);
     this->private_key.Save(temp_base64_private_key_encoder);
     temp_base64_private_key_encoder.MessageEnd();
     private_file.close();
@@ -212,7 +212,7 @@ void ECC::write_public_key()
 {
     std::ofstream public_file(this->public_key_path);
     CryptoPP::FileSink public_sink(public_file);
-    CryptoPP::Base64Encoder temp_base64_public_key_encoder(new CryptoPP::Redirector(public_sink));
+    CryptoPP::Base64Encoder temp_base64_public_key_encoder(new CryptoPP::Redirector(public_sink), true, 212);
     this->public_key.Save(temp_base64_public_key_encoder);
     temp_base64_public_key_encoder.MessageEnd();
     public_file.close();
