@@ -107,9 +107,84 @@ else
     echo -e "\033[33m[F] Decryption failed to produce the original plaintext\033[0m"
 fi
 
-# ./iris keypair sign
-# ./iris identity --help
-# ./iris identity add
-# ./iris identity remove
-# ./iris identity list
-# ./iris identity verify
+# Add key pub_b to identities and verify the file contains the public key
+
+command="cat ./keys/pub_b"
+public_key=$(eval $command)
+command="./iris identity add ./identities/pub_b $public_key"
+result=$(eval $command)
+exit_code=$?
+if [ $exit_code -eq 0 ]; then
+    echo -e "\033[32m[P] '$command'\033[0m"
+elif [ $exit_code -eq 1 ]; then
+    echo -e "\033[33m[F] '$command'\033[0m"
+else
+    echo -e "\033[33m[$exit_code] '$command'\033[0m"
+fi
+
+if grep -q "$public_key" "./identities/pub_b"; then
+    echo -e "\033[32m[P] Public key contained in created identity file\033[0m"
+else
+    echo -e "\033[33m[F] Public key missing in created identity file\033[0m"
+fi
+
+# Sign a message and verify it using the identity command
+
+command="./iris keypair sign ./keys/pri_b \"$plaintext\""
+result=$(eval $command)
+exit_code=$?
+if [ $exit_code -eq 0 ]; then
+    echo -e "\033[32m[P] '$command'\033[0m"
+elif [ $exit_code -eq 1 ]; then
+    echo -e "\033[33m[F] '$command'\033[0m"
+else
+    echo -e "\033[33m[$exit_code] '$command'\033[0m"
+fi
+
+exec 3<<< "$result"
+read -r text_hash <&3
+read -r signature <&3
+exec 3<&-
+
+command="./iris identity verify ./identities/pub_b $signature $text_hash"
+result=$(eval $command)
+exit_code=$?
+if [ $exit_code -eq 0 ]; then
+    echo -e "\033[32m[P] '$command'\033[0m"
+elif [ $exit_code -eq 1 ]; then
+    echo -e "\033[33m[F] '$command'\033[0m"
+else
+    echo -e "\033[33m[$exit_code] '$command'\033[0m"
+fi
+
+if [ "$result" == "Valid signature" ]; then
+    echo -e "\033[32m[P] Valid signature\033[0m"
+else
+    echo -e "\033[33m[F] Invalid signature\033[0m"
+fi
+
+# List identities
+
+command="./iris identity list ./identities/"
+result=$(eval $command)
+exit_code=$?
+if [ $exit_code -eq 0 ]; then
+    echo -e "\033[32m[P] '$command'\033[0m"
+elif [ $exit_code -eq 1 ]; then
+    echo -e "\033[33m[F] '$command'\033[0m"
+else
+    echo -e "\033[33m[$exit_code] '$command'\033[0m"
+fi
+
+# Remove identity
+
+command="./iris identity remove ./identities/pub_b"
+result=$(eval $command)
+exit_code=$?
+if [ $exit_code -eq 0 ]; then
+    echo -e "\033[32m[P] '$command'\033[0m"
+elif [ $exit_code -eq 1 ]; then
+    echo -e "\033[33m[F] '$command'\033[0m"
+else
+    echo -e "\033[33m[$exit_code] '$command'\033[0m"
+fi
