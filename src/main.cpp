@@ -7,7 +7,7 @@
 #include "crypto/ECC.cpp"
 
 // Define globals
-int generation_difficulty = 133337;
+int generation_difficulty = 1000000;
 std::string program_name;
 char current_path_chars[FILENAME_MAX];
 std::string current_path;
@@ -15,6 +15,8 @@ std::string default_keys_path;
 std::string default_public_key_path;
 std::string default_private_key_path;
 std::string default_identities_path;
+std::vector<std::string> names;
+std::vector<std::string *> addresses;
 
 // Handle platform specific variations and create get_current_path macro
 #if defined(_WIN32) || defined(_WIN64)
@@ -74,12 +76,12 @@ void cout_keypair_help_prompt()
     std::cout << "Commands:" << std::endl;
     std::cout << std::endl;
     std::cout << "  generate" << std::endl;
-    std::cout << "  - named parameters:" << std::endl;
+    std::cout << "  - named arguments:" << std::endl;
     std::cout << "    --private_key_path" << std::endl;
     std::cout << "    --public_key_path" << std::endl;
     std::cout << "    --seed" << std::endl;
     std::cout << "    --n" << std::endl;
-    std::cout << "  - ordered parameters:" << std::endl;
+    std::cout << "  - ordered arguments:" << std::endl;
     std::cout << "    private_key_path" << std::endl;
     std::cout << "    public_key_path" << std::endl;
     std::cout << "    seed" << std::endl;
@@ -90,34 +92,34 @@ void cout_keypair_help_prompt()
     std::cout << "    " << program_name << " keypair generate " << default_private_key_path << " " << default_public_key_path << " UnlimitedGamesButNoGames 23" << std::endl;
     std::cout << std::endl;
     std::cout << "  delete" << std::endl;
-    std::cout << "  - named parameters:" << std::endl;
+    std::cout << "  - named arguments:" << std::endl;
     std::cout << "    --private_key_path" << std::endl;
     std::cout << "    --public_key_path" << std::endl;
-    std::cout << "  - ordered parameters:" << std::endl;
+    std::cout << "  - ordered arguments:" << std::endl;
     std::cout << "    private_key_path" << std::endl;
     std::cout << "    public_key_path" << std::endl;
     std::cout << std::endl;
     std::cout << "  encrypt" << std::endl;
-    std::cout << "  - named parameters:" << std::endl;
+    std::cout << "  - named arguments:" << std::endl;
     std::cout << "    --public_key_path" << std::endl;
     std::cout << "    --text" << std::endl;
-    std::cout << "  - ordered parameters:" << std::endl;
+    std::cout << "  - ordered arguments:" << std::endl;
     std::cout << "    public_key_path" << std::endl;
     std::cout << "    text" << std::endl;
     std::cout << std::endl;
     std::cout << "  decrypt" << std::endl;
-    std::cout << "  - named parameters:" << std::endl;
+    std::cout << "  - named arguments:" << std::endl;
     std::cout << "    --private_key_path" << std::endl;
     std::cout << "    --ciphertext" << std::endl;
-    std::cout << "  - ordered parameters:" << std::endl;
+    std::cout << "  - ordered arguments:" << std::endl;
     std::cout << "    private_key_path" << std::endl;
     std::cout << "    ciphertext" << std::endl;
     std::cout << std::endl;
     std::cout << "  sign" << std::endl;
-    std::cout << "  - named parameters:" << std::endl;
+    std::cout << "  - named arguments:" << std::endl;
     std::cout << "    --private_key_path" << std::endl;
     std::cout << "    --text" << std::endl;
-    std::cout << "  - ordered parameters:" << std::endl;
+    std::cout << "  - ordered arguments:" << std::endl;
     std::cout << "    private_key_path" << std::endl;
     std::cout << "    text" << std::endl;
     std::cout << std::endl;
@@ -135,31 +137,31 @@ void cout_identity_help_prompt()
     std::cout << "Commands:" << std::endl;
     std::cout << std::endl;
     std::cout << "  add" << std::endl;
-    std::cout << "  - named parameters:" << std::endl;
+    std::cout << "  - named arguments:" << std::endl;
     std::cout << "    --path" << std::endl;
     std::cout << "    --public_key" << std::endl;
-    std::cout << "  - ordered parameters:" << std::endl;
+    std::cout << "  - ordered arguments:" << std::endl;
     std::cout << "    path" << std::endl;
     std::cout << "    public_key" << std::endl;
     std::cout << std::endl;
     std::cout << "  remove" << std::endl;
-    std::cout << "  - named parameters:" << std::endl;
+    std::cout << "  - named arguments:" << std::endl;
     std::cout << "    --path" << std::endl;
-    std::cout << "  - ordered parameters:" << std::endl;
+    std::cout << "  - ordered arguments:" << std::endl;
     std::cout << "    path" << std::endl;
     std::cout << std::endl;
     std::cout << "  list" << std::endl;
-    std::cout << "  - named parameters:" << std::endl;
+    std::cout << "  - named arguments:" << std::endl;
     std::cout << "    --path" << std::endl;
-    std::cout << "  - ordered parameters:" << std::endl;
+    std::cout << "  - ordered arguments:" << std::endl;
     std::cout << "    path" << std::endl;
     std::cout << std::endl;
     std::cout << "  verify" << std::endl;
-    std::cout << "  - named parameters:" << std::endl;
+    std::cout << "  - named arguments:" << std::endl;
     std::cout << "    --public_key_path" << std::endl;
     std::cout << "    --signature" << std::endl;
     std::cout << "    --message_hash" << std::endl;
-    std::cout << "  - ordered parameters:" << std::endl;
+    std::cout << "  - ordered arguments:" << std::endl;
     std::cout << "    public_key_path" << std::endl;
     std::cout << "    signature" << std::endl;
     std::cout << "    message_hash" << std::endl;
@@ -224,6 +226,40 @@ std::vector<std::string> ls(std::string path)
     return files;
 }
 
+void process_arguments(int arg_count, char * arg_values[])
+{
+    // Store size and lengths to save CPU cycles
+    int names_size = names.size();
+    std::vector<int> name_lengths;
+    for (int z = 0; z < names_size; z++)
+    {
+        name_lengths.push_back(names[z].length());
+    }
+
+    // Extract named arguments:
+    for (int z = 3; z < arg_count; z++)
+    {
+        std::string argument = arg_values[z];
+
+        for (int y = 0; y < names_size; y++)
+        {
+            if (argument.find(names[z]) == 0)
+            {
+                *addresses[z] = argument.substr(name_lengths[z]);
+            }
+        }
+    }
+
+    // Extract positional arguments w/ precedence to named arguments:
+    for (int z = 3; z < arg_count; z++)
+    {
+        if ((*addresses[z - 3]).empty())
+        {
+            *addresses[z - 3] = arg_values[z];
+        }
+    }
+}
+
 int main(int arg_count, char * arg_values[])
 {
     // Define globals, defaults, and handle platform specific variations
@@ -245,83 +281,39 @@ int main(int arg_count, char * arg_values[])
         }
 
         // generate
-        // - named parameters:
-        //   --private_key_path
-        //   --public_key_path
-        //   --seed
-        //   --n
-        // - ordered parameters:
-        //   private_key_path
-        //   public_key_path
-        //   seed
-        //   n
         else if (strcmp(arg_values[2], "generate") == 0)
         {
             // Missing args
             if (arg_count == 3)
             {
                 std::cout << std::endl;
-                std::cout << "ERROR: Missing named/ordered parameters" << std::endl;
+                std::cout << "ERROR: Missing named/positional arguments" << std::endl;
                 cout_keypair_help_prompt();
                 return 1;
             }
 
-            // Possible params
+            // Extract named/positional CLI arguments
             std::string private_key_path;
             std::string public_key_path;
             std::string seed;
-            int n = 0;
-
-            // Check named params:
-            for (int z = 3; z < arg_count; z++)
-            {
-                std::string parameter = arg_values[z];
-
-                if (parameter.find("--private_key_path=") == 0)
-                {
-                    private_key_path = parameter.substr(19);
-                }
-                else if (parameter.find("--public_key_path=") == 0)
-                {
-                    public_key_path = parameter.substr(18);
-                }
-                else if (parameter.find("--seed=") == 0)
-                {
-                    seed = parameter.substr(7);
-                }
-                else if (parameter.find("--n=") == 0)
-                {
-                    n = std::stoi(parameter.substr(4));
-                }
-            }
-
-            // Check ordered params w/ precedence to named params:
-            if (private_key_path.empty() && arg_count > 3)
-            {
-                private_key_path = arg_values[3];
-            }
-            if (public_key_path.empty() && arg_count > 4)
-            {
-                public_key_path = arg_values[4];
-            }
-            if (seed.empty() && arg_count > 5)
-            {
-                seed = arg_values[5];
-            }
-            if (arg_count > 6)
-            {
-                n = std::atoi(arg_values[6]);
-            }
+            std::string n;
+            names.push_back("--private_key_path=");
+            names.push_back("--public_key_path=");
+            names.push_back("--seed=");
+            names.push_back("--n=");
+            addresses.push_back(&private_key_path);
+            addresses.push_back(&public_key_path);
+            addresses.push_back(&seed);
+            addresses.push_back(&n);
+            process_arguments(arg_count, arg_values);
 
             // Conditionally perform ops
             ECC ecc = ECC();
-            if (!private_key_path.empty())
-                ecc.set_private_key_path(private_key_path);
-            if (!public_key_path.empty())
-                ecc.set_public_key_path(public_key_path);
+            ecc.set_private_key_path(private_key_path);
+            ecc.set_public_key_path(public_key_path);
             if (!seed.empty())
             {
-                int rounds = n * generation_difficulty;
+                int rounds = std::stoi(n) * generation_difficulty;
                 int step = rounds / 100;
                 for (int z = 0; z < rounds; z++)
                 {
@@ -331,58 +323,32 @@ int main(int arg_count, char * arg_values[])
                         std::cout << "\r" << z / step  << "%" << std::flush;
                 }
                 std::cout << "\rComplete" << std::endl;
-                ecc.set_seed(seed);
+                ecc.set_seed_hash(seed);
             }
             ecc.generate_keypair();
             ecc.write_keypair();
         }
 
         // delete
-        // - named parameters:
-        //   --private_key_path
-        //   --public_key_path
-        // - ordered parameters:
-        //   private_key_path
-        //   public_key_path
         else if (strcmp(arg_values[2], "delete") == 0)
         {
             // Missing args
             if (arg_count == 3)
             {
                 std::cout << std::endl;
-                std::cout << "ERROR: Missing named/ordered parameters" << std::endl;
+                std::cout << "ERROR: Missing named/positional arguments" << std::endl;
                 cout_keypair_help_prompt();
                 return 1;
             }
 
-            // Possible params
+            // Extract named/positional CLI arguments
             std::string private_key_path;
             std::string public_key_path;
-
-            // Check named params:
-            for (int z = 3; z < arg_count; z++)
-            {
-                std::string parameter = arg_values[z];
-
-                if (parameter.find("--private_key_path=") == 0)
-                {
-                    private_key_path = parameter.substr(19);
-                }
-                else if (parameter.find("--public_key_path=") == 0)
-                {
-                    public_key_path = parameter.substr(18);
-                }
-            }
-
-            // Check ordered params w/ precedence to named params:
-            if (private_key_path.empty() && arg_count > 3)
-            {
-                private_key_path = arg_values[3];
-            }
-            if (public_key_path.empty() && arg_count > 4)
-            {
-                public_key_path = arg_values[4];
-            }
+            names.push_back("--private_key_path=");
+            names.push_back("--public_key_path=");
+            addresses.push_back(&private_key_path);
+            addresses.push_back(&public_key_path);
+            process_arguments(arg_count, arg_values);
 
             // Conditionally perform ops
             if (!private_key_path.empty())
@@ -410,51 +376,25 @@ int main(int arg_count, char * arg_values[])
         }
 
         // encrypt
-        // - named parameters:
-        //   --public_key_path
-        //   --text
-        // - ordered parameters:
-        //   public_key_path
-        //   text
         else if (strcmp(arg_values[2], "encrypt") == 0)
         {
             // Missing args
             if (arg_count == 3)
             {
                 std::cout << std::endl;
-                std::cout << "ERROR: Missing named/ordered parameters" << std::endl;
+                std::cout << "ERROR: Missing named/positional arguments" << std::endl;
                 cout_keypair_help_prompt();
                 return 1;
             }
 
-            // Possible params
+            // Extract named/positional CLI arguments
             std::string public_key_path;
             std::string text;
-
-            // Check named params:
-            for (int z = 3; z < arg_count; z++)
-            {
-                std::string parameter = arg_values[z];
-
-                if (parameter.find("--public_key_path=") == 0)
-                {
-                    public_key_path = parameter.substr(18);
-                }
-                else if (parameter.find("--text=") == 0)
-                {
-                    text = parameter.substr(7);
-                }
-            }
-
-            // Check ordered params w/ precedence to named params:
-            if (public_key_path.empty() && arg_count > 3)
-            {
-                public_key_path = arg_values[3];
-            }
-            if (text.empty() && arg_count > 4)
-            {
-                text = arg_values[4];
-            }
+            names.push_back("--public_key_path=");
+            names.push_back("--text=");
+            addresses.push_back(&public_key_path);
+            addresses.push_back(&text);
+            process_arguments(arg_count, arg_values);
 
             // Conditionally perform ops
             if (!public_key_path.empty() && !text.empty())
@@ -469,51 +409,25 @@ int main(int arg_count, char * arg_values[])
         }
 
         // decrypt
-        // - named parameters:
-        //   --private_key_path
-        //   --ciphertext
-        // - ordered parameters:
-        //   private_key_path
-        //   text
         else if (strcmp(arg_values[2], "decrypt") == 0)
         {
             // Missing args
             if (arg_count == 3)
             {
                 std::cout << std::endl;
-                std::cout << "ERROR: Missing named/ordered parameters" << std::endl;
+                std::cout << "ERROR: Missing named/positional arguments" << std::endl;
                 cout_keypair_help_prompt();
                 return 1;
             }
 
-            // Possible params
+            // Extract named/positional CLI arguments
             std::string private_key_path;
             std::string ciphertext;
-
-            // Check named params:
-            for (int z = 3; z < arg_count; z++)
-            {
-                std::string parameter = arg_values[z];
-
-                if (parameter.find("--private_key_path=") == 0)
-                {
-                    private_key_path = parameter.substr(19);
-                }
-                else if (parameter.find("--ciphertext=") == 0)
-                {
-                    ciphertext = parameter.substr(13);
-                }
-            }
-
-            // Check ordered params w/ precedence to named params:
-            if (private_key_path.empty() && arg_count > 3)
-            {
-                private_key_path = arg_values[3];
-            }
-            if (ciphertext.empty() && arg_count > 4)
-            {
-                ciphertext = arg_values[4];
-            }
+            names.push_back("--private_key_path=");
+            names.push_back("--ciphertext=");
+            addresses.push_back(&private_key_path);
+            addresses.push_back(&ciphertext);
+            process_arguments(arg_count, arg_values);
 
             // Conditionally perform ops
             if (!private_key_path.empty() && !ciphertext.empty())
@@ -529,51 +443,25 @@ int main(int arg_count, char * arg_values[])
         }
 
         // sign
-        // - named parameters:
-        //   --private_key_path
-        //   --text
-        // - ordered parameters:
-        //   private_key_path
-        //   text
         else if (strcmp(arg_values[2], "sign") == 0)
         {
             // Missing args
             if (arg_count == 3)
             {
                 std::cout << std::endl;
-                std::cout << "ERROR: Missing named/ordered parameters" << std::endl;
+                std::cout << "ERROR: Missing named/positional arguments" << std::endl;
                 cout_keypair_help_prompt();
                 return 1;
             }
 
-            // Possible params
+            // Extract named/positional CLI arguments
             std::string private_key_path;
             std::string text;
-
-            // Check named params:
-            for (int z = 3; z < arg_count; z++)
-            {
-                std::string parameter = arg_values[z];
-
-                if (parameter.find("--private_key_path=") == 0)
-                {
-                    private_key_path = parameter.substr(19);
-                }
-                else if (parameter.find("--text=") == 0)
-                {
-                    text = parameter.substr(7);
-                }
-            }
-
-            // Check ordered params w/ precedence to named params:
-            if (private_key_path.empty() && arg_count > 3)
-            {
-                private_key_path = arg_values[3];
-            }
-            if (text.empty() && arg_count > 4)
-            {
-                text = arg_values[4];
-            }
+            names.push_back("--private_key_path=");
+            names.push_back("--text=");
+            addresses.push_back(&private_key_path);
+            addresses.push_back(&text);
+            process_arguments(arg_count, arg_values);
 
             // Conditionally perform ops
             if (!private_key_path.empty() && !text.empty())
@@ -607,51 +495,25 @@ int main(int arg_count, char * arg_values[])
         }
 
         // add
-        // - named parameters:
-        //   --path
-        //   --public_key
-        // - ordered parameters:
-        //   path
-        //   public_key
         else if (strcmp(arg_values[2], "add") == 0)
         {
             // Missing args
             if (arg_count == 3)
             {
                 std::cout << std::endl;
-                std::cout << "ERROR: Missing named/ordered parameters" << std::endl;
+                std::cout << "ERROR: Missing named/positional arguments" << std::endl;
                 cout_keypair_help_prompt();
                 return 1;
             }
 
-            // Possible params
+            // Extract named/positional CLI arguments
             std::string path;
             std::string public_key;
-
-            // Check named params:
-            for (int z = 3; z < arg_count; z++)
-            {
-                std::string parameter = arg_values[z];
-
-                if (parameter.find("--path=") == 0)
-                {
-                    path = parameter.substr(7);
-                }
-                else if(parameter.find("--public_key=") == 0)
-                {
-                    public_key = parameter.substr(13);
-                }
-            }
-
-            // Check ordered params w/ precedence to named params:
-            if (path.empty() && arg_count > 3)
-            {
-                path = arg_values[3];
-            }
-            if (public_key.empty() && arg_count > 4)
-            {
-                public_key = arg_values[4];
-            }
+            names.push_back("--path=");
+            names.push_back("--public_key=");
+            addresses.push_back(&path);
+            addresses.push_back(&public_key);
+            process_arguments(arg_count, arg_values);
 
             if (path.empty() || public_key.empty())
             {
@@ -674,40 +536,22 @@ int main(int arg_count, char * arg_values[])
         }
 
         // remove
-        // - named parameters:
-        //   --path
-        // - ordered parameters:
-        //   path
         else if (strcmp(arg_values[2], "remove") == 0)
         {
             // Missing args
             if (arg_count == 3)
             {
                 std::cout << std::endl;
-                std::cout << "ERROR: Missing named/ordered parameters" << std::endl;
+                std::cout << "ERROR: Missing named/positional arguments" << std::endl;
                 cout_keypair_help_prompt();
                 return 1;
             }
 
-            // Possible params
+            // Extract named/positional CLI arguments
             std::string path;
-
-            // Check named params:
-            for (int z = 3; z < arg_count; z++)
-            {
-                std::string parameter = arg_values[z];
-
-                if(parameter.find("--path=") == 0)
-                {
-                    path = parameter.substr(7);
-                }
-            }
-
-            // Check ordered params w/ precedence to named params:
-            if (path.empty() && arg_count >= 3)
-            {
-                path = arg_values[3];
-            }
+            names.push_back("--path=");
+            addresses.push_back(&path);
+            process_arguments(arg_count, arg_values);
 
             // Conditionally perform ops
             if (!path.empty())
@@ -724,31 +568,13 @@ int main(int arg_count, char * arg_values[])
         }
 
         // list
-        // - named parameters:
-        //   --path
-        // - ordered parameters:
-        //   path
         else if (strcmp(arg_values[2], "list") == 0)
         {
-            // Possible params
+            // Extract named/positional CLI arguments
             std::string path;
-
-            // Check named params:
-            for (int z = 3; z < arg_count; z++)
-            {
-                std::string parameter = arg_values[z];
-
-                if(parameter.find("--path=") == 0)
-                {
-                    path = parameter.substr(7);
-                }
-            }
-
-            // Check ordered params w/ precedence to named params:
-            if (path.empty() && arg_count > 3)
-            {
-                path = arg_values[3];
-            }
+            names.push_back("--path=");
+            addresses.push_back(&path);
+            process_arguments(arg_count, arg_values);
 
             // If not set, fallback to use default identities path
             if (path.empty())
@@ -778,62 +604,28 @@ int main(int arg_count, char * arg_values[])
         }
 
         // verify
-        // - named parameters:
-        //   --public_key_path
-        //   --signature
-        //   --message_hash
-        // - ordered parameters:
-        //   public_key_path
-        //   signature
-        //   message_hash
         else if (strcmp(arg_values[2], "verify") == 0)
         {
             // Missing args
             if (arg_count == 3)
             {
                 std::cout << std::endl;
-                std::cout << "ERROR: Missing named/ordered parameters" << std::endl;
+                std::cout << "ERROR: Missing named/positional arguments" << std::endl;
                 cout_keypair_help_prompt();
                 return 1;
             }
 
-            // Possible params
+            // Extract named/positional CLI arguments
             std::string public_key_path;
             std::string signature;
             std::string message_hash;
-
-            // Check named params:
-            for (int z = 3; z < arg_count; z++)
-            {
-                std::string parameter = arg_values[z];
-
-                if (parameter.find("--public_key_path=") == 0)
-                {
-                    public_key_path = parameter.substr(7);
-                }
-                else if (parameter.find("--signature=") == 0)
-                {
-                    signature = parameter.substr(12);
-                }
-                else if (parameter.find("--message_hash=") == 0)
-                {
-                    message_hash = parameter.substr(15);
-                }
-            }
-
-            // Check ordered params w/ precedence to named params:
-            if (public_key_path.empty() && arg_count > 3)
-            {
-                public_key_path = arg_values[3];
-            }
-            if (signature.empty() && arg_count > 4)
-            {
-                signature = arg_values[4];
-            }
-            if (message_hash.empty() && arg_count > 5)
-            {
-                message_hash = arg_values[5];
-            }
+            names.push_back("--public_key_path=");
+            names.push_back("--signature=");
+            names.push_back("--message_hash=");
+            addresses.push_back(&public_key_path);
+            addresses.push_back(&signature);
+            addresses.push_back(&message_hash);
+            process_arguments(arg_count, arg_values);
 
             // Error if required args not met
             if (public_key_path.empty() || signature.empty() ||  message_hash.empty())
