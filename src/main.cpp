@@ -756,11 +756,20 @@ int main(int arg_count, char * arg_values[])
                 path = default_identities_path;
             }
 
+            // Handle if no identities are present
+            std::vector<std::string> files = ls(path);
+            int file_count = files.size();
+            if (file_count == 0)
+            {
+                std::cout << std::endl;
+                std::cout << "No identities present in " << path << std::endl;
+                std::cout << std::endl;
+                return 0;
+            }
+
             // Output tab formatted index filename pairs in path
             std::cout << std::endl;
             std::cout << "Index\tFilename" << std::endl;
-            std::vector<std::string> files = ls(path);
-            int file_count = files.size();
             for (int z = 0; z < file_count; z++)
             {
                 std::cout << z << '\t' << files[z] << std::endl;
