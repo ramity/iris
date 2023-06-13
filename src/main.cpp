@@ -472,7 +472,7 @@ int main(int arg_count, char * arg_values[])
                 std::string text_hash = ecc.hash(ecc.hash(text));
                 ecc.set_raw_plaintext_hash(text_hash);
                 ecc.sign();
-                std::cout << text_hash << std::endl;
+                std::cout << ecc.encode(text_hash) << std::endl;
                 std::cout << ecc.get_encoded_signature() << std::endl;
             }
         }
@@ -590,7 +590,7 @@ int main(int arg_count, char * arg_values[])
                 std::cout << std::endl;
                 std::cout << "No identities present in " << path << std::endl;
                 std::cout << std::endl;
-                return 0;
+                return 1;
             }
 
             // Output tab formatted index filename pairs in path
