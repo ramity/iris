@@ -90,8 +90,13 @@ std::string ECC::get_private_key_path()
 
 void ECC::set_seed(std::string seed)
 {
-    this->use_drng = true;
     std::string hash = this->hash(seed);
+    this->set_seed_hash(hash);
+}
+
+void ECC::set_seed_hash(std::string hash)
+{
+    this->use_drng = true;
     int key_size = 32;
     int iv_size = 16;
     std::string key_string = hash.substr(0, key_size);
