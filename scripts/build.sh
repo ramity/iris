@@ -21,6 +21,11 @@ IDENTITIES_DIR="$BUILD_DIR/identities"
 mkdir $KEYS_DIR
 mkdir $IDENTITIES_DIR
 
+# Add test_release script
+
+cp /root/iris/scripts/test_release.sh $BUILD_DIR/test_release.sh
+chmod +x $BUILD_DIR/test_release.sh
+
 # Define platform specific bins
 
 L64_BIN="$BUILD_DIR/iris"
@@ -62,8 +67,8 @@ fi
 
 # Create release zips
 
-zip -9 $BUILD_DIR/linux-64.zip -r $BUILD_DIR -x $W64_BIN -x "*.zip" -x ".gitkeep"
-zip -9 $BUILD_DIR/windows-64.zip -r $BUILD_DIR -x $L64_BIN -x "*.zip" -x ".gitkeep"
+zip -9 $BUILD_DIR/linux-64.zip -r $BUILD_DIR -x $W64_BIN -x "*.zip" -x ".gitkeep" -x "*.sh"
+zip -9 $BUILD_DIR/windows-64.zip -r $BUILD_DIR -x $L64_BIN -x "*.zip" -x ".gitkeep" -x "*.sh"
 
 # Prevent permission issues when testing from within the build dir
 
