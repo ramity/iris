@@ -243,9 +243,9 @@ void process_arguments(int arg_count, char * arg_values[])
 
         for (int y = 0; y < names_size; y++)
         {
-            if (argument.find(names[z]) == 0)
+            if (argument.find(names[y]) == 0)
             {
-                *addresses[z] = argument.substr(name_lengths[z]);
+                *addresses[y] = argument.substr(name_lengths[y]);
             }
         }
     }
