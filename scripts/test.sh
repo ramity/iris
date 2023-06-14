@@ -1,3 +1,5 @@
+#!/bin/bash
+
 INC="/root/iris/include"
 BIN="/root/iris/bin/test"
 TGT="/root/iris/tests/*"
