@@ -275,7 +275,7 @@ int main(int arg_count, char * arg_values[])
     else if (strcmp(arg_values[1], "keypair") == 0)
     {
         // Check for --help flag at end of input
-        if (strcmp(arg_values[arg_count], "--help") == 0)
+        if (strcmp(arg_values[arg_count - 1], "--help") == 0)
         {
             cout_keypair_help_prompt();
         }
@@ -489,7 +489,7 @@ int main(int arg_count, char * arg_values[])
     else if (strcmp(arg_values[1], "identity") == 0)
     {
         // Check for --help flag at end of input
-        if (strcmp(arg_values[arg_count], "--help") == 0)
+        if (strcmp(arg_values[arg_count - 1], "--help") == 0)
         {
             cout_identity_help_prompt();
         }
