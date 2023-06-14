@@ -1,3 +1,5 @@
+#!/bin/bash
+
 DIR="/root/iris/libs/linux/cryptopp"
 
 # remove dir and files within if it exists

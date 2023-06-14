@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Define platform agnostic vars and conditionally exit if target does not exist
 
 IRIS_INC="/root/iris/include"

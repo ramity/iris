@@ -1,3 +1,5 @@
+#!/bin/bash
+
 DIR="/root/iris/libs/src/cryptopp"
 VER="CRYPTOPP_8_7_0"
 CXX="g++"

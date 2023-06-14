@@ -1,3 +1,5 @@
+#!/bin/bash
+
 INC="/root/iris/include"
 BIN="/root/iris/bin/win64-cc-test.exe"
 TGT="/root/iris/tests/crypto-ecc.cpp"

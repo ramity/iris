@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Include directory
 INC="/root/iris/include/"
 
