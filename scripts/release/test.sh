@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Simply generate a keypair
 
 command="./iris keypair generate ./keys/pri_a ./keys/pub_a"

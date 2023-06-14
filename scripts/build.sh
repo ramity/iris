@@ -1,7 +1,9 @@
+#!/bin/bash
+
 # Clear build dir
 
-BUILD_DIR="/root/iris/build/*"
-rm -r -d $BUILD_DIR
+BUILD_DIR="/root/iris/build"
+rm -r -d $BUILD_DIR/*
 
 # Define platform agnostic vars and conditionally exit if target does not exist
 
@@ -15,16 +17,17 @@ fi
 
 # Build require dirs
 
-BUILD_DIR="/root/iris/build"
 KEYS_DIR="$BUILD_DIR/keys"
 IDENTITIES_DIR="$BUILD_DIR/identities"
 mkdir $KEYS_DIR
 mkdir $IDENTITIES_DIR
 
-# Add test_release script
+# Add release related scripts
 
-cp /root/iris/scripts/test_release.sh $BUILD_DIR/test_release.sh
-chmod +x $BUILD_DIR/test_release.sh
+cp /root/iris/scripts/release/test.sh $BUILD_DIR/test.sh
+cp /root/iris/scripts/release/update.sh $BUILD_DIR/update.sh
+chmod +x $BUILD_DIR/test.sh
+chmod +x $BUILD_DIR/update.sh
 
 # Define platform specific bins
 
@@ -65,11 +68,21 @@ else
     echo -e "\033[31m[C] Failed\t$TGT->$W64_BIN\033[0m"
 fi
 
+# Add verison file for update script
+
+touch $BUILD_DIR/version
+echo "v0.3.0" > $BUILD_DIR/version
+
+# Add ramity identity
+
+echo "MIGbMBAGByqGSM49AgEGBSuBBAAjA4GGAAQBNtwf+HWIV/ifAz826Anbd6Ce5L3WPvXGBZ99EEd1QNYqzToWCCLMd5ajzFOidBESl5jjX0jwgpxvV626KBHaJMgB6zKDw3zd2v1IC7IkNCXUDe7DRgqyjFpkLTJ+aGrBRfBgJq20Sqf/RHINHvlzulzQYKV0/vrdGqdqbsQURHoWZGQ=" > $BUILD_DIR/identities/ramity
+
 # Create release zips
 
-zip -9 $BUILD_DIR/linux-64.zip -r $BUILD_DIR -x $W64_BIN -x "*.zip" -x ".gitkeep" -x "*.sh"
-zip -9 $BUILD_DIR/windows-64.zip -r $BUILD_DIR -x $L64_BIN -x "*.zip" -x ".gitkeep" -x "*.sh"
+cd $BUILD_DIR
+zip -9 linux-64.zip -r ./* -x ./iris.exe -x "*.zip" -x ".gitkeep"
+zip -9 windows-64.zip -r ./* -x ./iris -x "*.zip" -x ".gitkeep"
 
 # Prevent permission issues when testing from within the build dir
 
-chown -R 1000:1000 $BUILD_DIR/*
+chown -R 1000:1000 ./*
