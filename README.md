@@ -83,7 +83,7 @@ cat ./keys/public_key
 Alice adds Bob's public key to her iris instance:
 
 ```
-./iris identity add ./identities/alice --public_key=MIGbMBAGByqGSM49AgEGBSuBBAAjA4GGAAQBUXSK3fQJoz460Rwb/l/opXIJI6Spa/nRYwYjnQbDqknGOexgjbxr+pivGkIH2VO41ONU+aDCMcJ+QM4t+NBrrpsAr4ewQFgNmk1kBa11A60sc35SRVfJqAccvF3mAbE+t8WAkBnioRA/xo3VngZPQyDs6NuNgJxQqIEzpCyYC9bVQVs
+./iris identity add ./identities/alice --public_key=MIGbMBAGByqGSM49AgEGBSuBBAAjA4GGAAQBUXSK3fQJoz460Rwb/l/opXIJI6Spa/nRYwYjnQbDqknGOexgjbxr+pivGkIH2VO41ONU+aDCMcJ+QM4t+NBrrpsAr4ewQFgNmk1kBa11A60sc35SRVfJqAccvF3mAbE+t8WAkBnioRA/xo3VngZPQyDs6NuNgJxQqIEzpCyYC9bVQVs=
 ```
 
 > File written successfully
