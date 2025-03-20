@@ -2,8 +2,6 @@
 
 ![splash](assets/splash.png)
 
-> Project currently work in progress
-
 # ToC
 
 - [Quick start](#quick-start)
