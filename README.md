@@ -92,7 +92,7 @@ Alice and Bob can now utilize the saved identities to encrypt text, share cipher
 
 # Rationale
 
-- Create a tool for close friends and I to communicate securely over insecure channels.
+- Create a tool for close friends and I to communicate securely over unsecure channels.
 - Easily spin out wallet software for another project I've been working on where most of the ECC logic comes from: https://github.com/ramity/ramium
 - Explore compiling c++ executables for multiple platforms
 
