@@ -54,7 +54,7 @@ void cout_general_help_prompt()
     std::cout << std::endl;
     std::cout << "Usage: " << program_name << " COMMAND" << std::endl;
     std::cout << std::endl;
-    std::cout << "A portable management tool forcryptography operations" << std::endl;
+    std::cout << "A portable management tool for cryptography operations" << std::endl;
     std::cout << std::endl;
     std::cout << "Commands:" << std::endl;
     std::cout << "  keypair      Keypair related operations" << std::endl;

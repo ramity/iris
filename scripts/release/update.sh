@@ -41,7 +41,20 @@ echo "Latest remote tag: $latest_tag"
 # Compare tags
 if [[ "$tag" == "$latest_tag" ]]; then
     echo "Your version is up to date."
+    exit 0
 else
+    # Strip 'v' prefix
+    v1="${tag#v}"
+    v2="${latest_tag#v}"
+
+    # Compare using sort -V (version sort)
+    newest=$(printf "%s\n%s" "$v1" "$v2" | sort -V | tail -n 1)
+
+    if [[ "$newest" == "$v1" ]]; then
+        echo "Your version is newer than the latest known tag."
+        exit 0
+    fi
+
     echo "Your version is not up to date."
     read -p "Do you want to download the latest version? (y/n) " choice
 

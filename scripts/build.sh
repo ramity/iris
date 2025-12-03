@@ -68,10 +68,10 @@ else
     echo -e "\033[31m[C] Failed\t$TGT->$W64_BIN\033[0m"
 fi
 
-# Add verison file for update script
+# Add version file for update script
 
 touch $BUILD_DIR/version
-echo "v0.3.0" > $BUILD_DIR/version
+echo "v0.3.2" > $BUILD_DIR/version
 
 # Add ramity identity
 
