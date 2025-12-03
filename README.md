@@ -21,7 +21,7 @@
 
 # Quick start
 
-- Download and unzip latest release ([Linux](https://github.com/ramity/iris/releases/download/v0.1.0/linux-64.zip), [Windows](https://github.com/ramity/iris/releases/download/v0.1.0/windows-64.zip))
+- Download and unzip latest release ([Linux](https://github.com/ramity/iris/releases/download/v0.3.1/linux-64.zip), [Windows](https://github.com/ramity/iris/releases/download/v0.3.1/windows-64.zip))
 - Execute compiled binary from CLI
 
 # Commands
