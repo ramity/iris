@@ -104,7 +104,9 @@ class ECC
     void write_keypair();
 
     void encrypt();
+    void encrypt_file(std::string input_file_path, std::string output_file_path);
     void decrypt();
+    void decrypt_file(std::string input_file_path, std::string output_file_path);
     void sign();
     bool verify();
 

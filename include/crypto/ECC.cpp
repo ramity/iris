@@ -247,10 +247,25 @@ void ECC::encrypt()
     return;
 }
 
+void ECC::encrypt_file(std::string input_file_path, std::string output_file_path)
+{
+    std::ifstream input_file(input_file_path, std::ios::binary);
+    this->output = "";
+    CryptoPP::FileSource(
+        input_file,
+        true,
+        new CryptoPP::Redirector(*this->encryptor_filter)
+    );
+
+    std::ofstream output_file(output_file_path, std::ios::binary);
+    output_file << this->output;
+
+    input_file.close();
+    output_file.close();
+}
+
 void ECC::decrypt()
 {
-    // Takes raw_ciphertext and creates all plaintext variants
-
     this->output = "";
     CryptoPP::StringSource(
         this->raw_ciphertext,
@@ -258,10 +273,27 @@ void ECC::decrypt()
         new CryptoPP::Redirector(*this->decryptor_filter)
     );
 
-    this->raw_plaintext = output;
+    this->raw_plaintext = this->output;
     this->encoded_plaintext = this->encode(this->raw_plaintext);
     this->raw_plaintext_hash = this->hash(this->raw_plaintext);
     this->encoded_plaintext_hash = this->encode(this->raw_plaintext_hash);
+}
+
+void ECC::decrypt_file(std::string input_file_path, std::string output_file_path)
+{
+    std::ifstream input_file(input_file_path, std::ios::binary);
+    this->output = "";
+    CryptoPP::FileSource(
+        input_file,
+        true,
+        new CryptoPP::Redirector(*this->decryptor_filter)
+    );
+
+    std::ofstream output_file(output_file_path,  std::ios::binary);
+    output_file << this->output;
+
+    input_file.close();
+    output_file.close();
 }
 
 void ECC::sign()

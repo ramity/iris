@@ -32,7 +32,9 @@ iris keypair --help
 iris keypair generate [args]
 iris keypair delete [args]
 iris keypair encrypt [args]
+iris keypair encrypt_file [args]
 iris keypair decrypt [args]
+iris keypair decrypt_file [args]
 iris keypair sign [args]
 iris identity --help
 iris identity add [args]

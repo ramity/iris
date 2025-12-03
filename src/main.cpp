@@ -107,6 +107,16 @@ void cout_keypair_help_prompt()
     std::cout << "    public_key_path" << std::endl;
     std::cout << "    text" << std::endl;
     std::cout << std::endl;
+    std::cout << "  encrypt_file" << std::endl;
+    std::cout << "  - named arguments:" << std::endl;
+    std::cout << "    --public_key_path" << std::endl;
+    std::cout << "    --input_file_path" << std::endl;
+    std::cout << "    --output_file_path" << std::endl;
+    std::cout << "  - ordered arguments:" << std::endl;
+    std::cout << "    public_key_path" << std::endl;
+    std::cout << "    input_file_path" << std::endl;
+    std::cout << "    output_file_path" << std::endl;
+    std::cout << std::endl;
     std::cout << "  decrypt" << std::endl;
     std::cout << "  - named arguments:" << std::endl;
     std::cout << "    --private_key_path" << std::endl;
@@ -114,6 +124,16 @@ void cout_keypair_help_prompt()
     std::cout << "  - ordered arguments:" << std::endl;
     std::cout << "    private_key_path" << std::endl;
     std::cout << "    ciphertext" << std::endl;
+    std::cout << std::endl;
+    std::cout << "  decrypt_file" << std::endl;
+    std::cout << "  - named arguments:" << std::endl;
+    std::cout << "    --private_key_path" << std::endl;
+    std::cout << "    --input_file_path" << std::endl;
+    std::cout << "    --output_file_path" << std::endl;
+    std::cout << "  - ordered arguments:" << std::endl;
+    std::cout << "    private_key_path" << std::endl;
+    std::cout << "    input_file_path" << std::endl;
+    std::cout << "    output_file_path" << std::endl;
     std::cout << std::endl;
     std::cout << "  sign" << std::endl;
     std::cout << "  - named arguments:" << std::endl;
@@ -408,6 +428,41 @@ int main(int arg_count, char * arg_values[])
             }
         }
 
+        // encrypt_file
+        else if (strcmp(arg_values[2], "encrypt_file") == 0)
+        {
+            // Missing args
+            if (arg_count == 3)
+            {
+                std::cout << std::endl;
+                std::cout << "ERROR: Missing named/positional arguments" << std::endl;
+                cout_keypair_help_prompt();
+                return 1;
+            }
+
+            // Extract named/positional CLI arguments
+            std::string public_key_path;
+            std::string input_file_path;
+            std::string output_file_path;
+            names.push_back("--public_key_path=");
+            names.push_back("--input_file_path=");
+            names.push_back("--output_file_path=");
+            addresses.push_back(&public_key_path);
+            addresses.push_back(&input_file_path);
+            addresses.push_back(&output_file_path);
+            process_arguments(arg_count, arg_values);
+
+            // Conditionally perform ops
+            if (!public_key_path.empty() && !input_file_path.empty() && !output_file_path.empty())
+            {
+                ECC ecc = ECC();
+                ecc.set_public_key_path(public_key_path);
+                ecc.read_public_key();
+                ecc.encrypt_file(input_file_path, output_file_path);
+                std::cout << "File encrypted successfully to " << output_file_path << std::endl;
+            }
+        }
+
         // decrypt
         else if (strcmp(arg_values[2], "decrypt") == 0)
         {
@@ -439,6 +494,41 @@ int main(int arg_count, char * arg_values[])
                 ecc.set_raw_ciphertext(raw_ciphertext);
                 ecc.decrypt();
                 std::cout << ecc.get_raw_plaintext() << std::endl;
+            }
+        }
+
+        // decrypt_file
+        else if (strcmp(arg_values[2], "decrypt_file") == 0)
+        {
+            // Missing args
+            if (arg_count == 3)
+            {
+                std::cout << std::endl;
+                std::cout << "ERROR: Missing named/positional arguments" << std::endl;
+                cout_keypair_help_prompt();
+                return 1;
+            }
+
+            // Extract named/positional CLI arguments
+            std::string private_key_path;
+            std::string input_file_path;
+            std::string output_file_path;
+            names.push_back("--private_key_path=");
+            names.push_back("--input_file_path=");
+            names.push_back("--output_file_path=");
+            addresses.push_back(&private_key_path);
+            addresses.push_back(&input_file_path);
+            addresses.push_back(&output_file_path);
+            process_arguments(arg_count, arg_values);
+
+            // Conditionally perform ops
+            if (!private_key_path.empty() && !input_file_path.empty() && !output_file_path.empty())
+            {
+                ECC ecc = ECC();
+                ecc.set_private_key_path(private_key_path);
+                ecc.read_private_key();
+                ecc.decrypt_file(input_file_path, output_file_path);
+                std::cout << "File decrypted successfully to " << output_file_path << std::endl;
             }
         }
 
