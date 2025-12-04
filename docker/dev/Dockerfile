@@ -18,4 +18,4 @@ RUN apt -y install git
 RUN apt -y install unzip zip
 
 # Keep container open
-ENTRYPOINT tail -f /dev/null
+ENTRYPOINT sleep infinity
