@@ -13,11 +13,19 @@ is_windows() {
     esac
 }
 
+exit_script() {
+    if is_windows; then
+        read -n 1 -s -r -p "Press any key to continue..."
+    fi
+
+    exit $1
+}
+
 # Read tag value from file
 version_file="./version"
 if [[ ! -f "$version_file" ]]; then
     echo "Version file not found: $version_file"
-    exit 1
+    exit_script 1
 fi
 
 tag=$(cat "$version_file")
@@ -33,7 +41,7 @@ elif command_exists wget; then
     latest_tag=$(wget -qO- "$api_url" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
 else
     echo "Neither curl nor wget found. Please install either of them and try again."
-    exit 1
+    exit_script 1
 fi
 
 echo "Latest remote tag: $latest_tag"
@@ -41,7 +49,7 @@ echo "Latest remote tag: $latest_tag"
 # Compare tags
 if [[ "$tag" == "$latest_tag" ]]; then
     echo "Your version is up to date."
-    exit 0
+    exit_script 0
 else
     # Strip 'v' prefix
     v1="${tag#v}"
@@ -52,7 +60,7 @@ else
 
     if [[ "$newest" == "$v1" ]]; then
         echo "Your version is newer than the latest known tag."
-        exit 0
+        exit_script 0
     fi
 
     echo "Your version is not up to date."
@@ -77,7 +85,7 @@ else
             wget -q -O "$zip_file" "$download_url"
         else
             echo "Neither curl nor wget found. Please install either of them and try again."
-            exit 1
+            exit_script 1
         fi
 
         echo "Unzipping $latest_tag..."
@@ -92,8 +100,4 @@ else
     fi
 fi
 
-# Add a pause to keep script from exiting before user can examine output
-
-if is_windows; then
-    read -n 1 -s -r -p "Press any key to continue..."
-fi
+exit_script 0
