@@ -17,5 +17,8 @@ RUN apt -y install make
 RUN apt -y install git
 RUN apt -y install unzip zip
 
+# Add curl
+RUN apt -y install curl
+
 # Keep container open
 ENTRYPOINT sleep infinity
