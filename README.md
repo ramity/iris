@@ -53,18 +53,18 @@ Alice and Bob wish to communicate over an unsecure channel. The below details a 
 
 Alice generates a keypair:
 ```
-./iris keypair generate ./keys/private_key ./keys/public_key
+./iris keypair generate ./keys/private_key ./identities/public_key
 ```
 
 Bob generates a keypair:
 ```
-./iris keypair generate ./keys/private_key ./keys/public_key
+./iris keypair generate ./keys/private_key ./identities/public_key
 ```
 
 Alice `cat`s her public key to the console, copies it, and shares it to Bob over an unsecure channel:
 
 ```
-cat ./keys/public_key
+cat ./identities/public_key
 ```
 > MIGbMBAGByqGSM49AgEGBSuBBAAjA4GGAAQBW9w/ObxNLQjObQ8XUVKF9kgk7NVlA+5SjItlL5ZuW1KR5GHForrGz244Xp1LG1/higCPCTD5DnjeIwX8EDNQunsBGOuR9BX1ldKdMJuOl9KufRRKuIFFOK4ihMum4sfHFV18BKxhlJkrqay6hqLnUvsRx/C32X7j70vLHxeRXhGAE4g=
 
