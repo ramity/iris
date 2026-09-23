@@ -195,9 +195,9 @@ void define_globals(int arg_count, char * arg_values[])
     get_current_path(current_path_chars, sizeof(current_path_chars));
     current_path = current_path_chars;
     default_keys_path = current_path + path_separator + "keys";
-    default_public_key_path = default_keys_path + path_separator + "public_key";
     default_private_key_path = default_keys_path + path_separator + "private_key";
     default_identities_path = current_path + path_separator + "identities";
+    default_public_key_path = default_identities_path + path_separator + "public_key";
 }
 
 std::vector<std::string> ls(std::string path)
