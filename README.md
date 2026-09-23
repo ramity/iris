@@ -165,7 +165,7 @@ Iris supports the use of a master seed that is akin to a [deterministic wallet](
 The use of a master seed does introduce a potential security risk. If an attacker gains access to the master seed, they can regenerate all the keypairs.
 
 ```
-./iris keypair generate ./keys/private_key ./keys/public_key toUseEvenGoWantToDoLookMoreLike 42
+./iris keypair generate ./private_key ./public_key toUseEvenGoWantToDoLookMoreLike 42
 ```
 
 > The `keypair generate` command generating the 42th derived key from the "toUseEvenGoWantToDoLookMoreLike" master seed.
