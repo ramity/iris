@@ -27,8 +27,10 @@ mkdir $IDENTITIES_DIR
 
 # Add release related scripts
 
+cp /root/iris/scripts/release/easy.sh $BUILD_DIR/easy.sh
 cp /root/iris/scripts/release/test.sh $BUILD_DIR/test.sh
 cp /root/iris/scripts/release/update.sh $BUILD_DIR/update.sh
+chmod +x $BUILD_DIR/easy.sh
 chmod +x $BUILD_DIR/test.sh
 chmod +x $BUILD_DIR/update.sh
 
