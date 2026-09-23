@@ -2,6 +2,8 @@
 
 ![splash](assets/splash.png)
 
+> Putting sense in noise.
+
 # ToC
 
 - [Quick start](#quick-start)
@@ -45,7 +47,7 @@ iris identity verify [args]
 
 # Example usage
 
-### Alice and Bob wish to communicate over an unsecure channel. The below details a user story featuring keypair generation and public key sharing using linux devices. The same can be accomplished on windows devices with variances (`./iris`->`iris.exe`, `cat`->`type`, etc).
+Alice and Bob wish to communicate over an unsecure channel. The below details a user story featuring keypair generation and public key sharing using linux devices. The same can be accomplished on windows devices with variances (`./iris`->`iris.exe`, `cat`->`type`, etc).
 
 ---
 
@@ -108,14 +110,17 @@ Alice and Bob can now utilize the saved identities to encrypt text, share cipher
 - Portable 64-bit Window and 64-bit Linux binary executables
 
 ## Key formats
+
 - ECC
 
 ## Key management
+
 - Generation
 - Storage
 - Destruction
 
 ## Key operations
+
 - Encryption
 - Decryption
 - Signing
@@ -124,6 +129,7 @@ Alice and Bob can now utilize the saved identities to encrypt text, share cipher
 ---
 
 ## Setting up dev environment
+
 (Host computer)
 ```
 docker compose up -d

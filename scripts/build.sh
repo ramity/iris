@@ -3,7 +3,10 @@
 # Clear build dir
 
 BUILD_DIR="/root/iris/build"
-rm -r -d $BUILD_DIR/*
+rm -rf $BUILD_DIR/*
+
+# Recreate .gitkeep file
+touch $BUILD_DIR/.gitkeep
 
 # Define platform agnostic vars and conditionally exit if target does not exist
 
