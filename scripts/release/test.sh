@@ -1,8 +1,25 @@
 #!/bin/bash
 
+# Function to check if the script is running in a Windows environment
+
+is_windows() {
+    case "$OSTYPE" in
+        msys*|cygwin*|mingw*|win*) return 0 ;;
+        *) return 1 ;;
+    esac
+}
+
+# Conditionally use ./iris or ./iris depending on if windows
+
+if is_windows; then
+    executable="./iris.exe"
+else
+    executable="./iris"
+fi
+
 # Simply generate a keypair
 
-command="./iris keypair generate ./keys/pri_a ./identities/pub_a"
+command="$executable keypair generate ./keys/pri_a ./identities/pub_a"
 result=$(eval $command)
 exit_code=$?
 if [ $exit_code -eq 0 ]; then
@@ -15,7 +32,7 @@ fi
 
 # Generate keypairs using the same seed and compare files
 
-command="./iris keypair generate ./keys/pri_b ./identities/pub_b \"UnlimitedGamesButNoGames\" 1"
+command="$executable keypair generate ./keys/pri_b ./identities/pub_b \"UnlimitedGamesButNoGames\" 1"
 result=$(eval $command)
 exit_code=$?
 if [ $exit_code -eq 0 ]; then
@@ -26,7 +43,7 @@ else
     echo -e "\033[33m[$exit_code] '$command'\033[0m"
 fi
 
-command="./iris keypair generate ./keys/pri_c ./identities/pub_c \"UnlimitedGamesButNoGames\" 1"
+command="$executable keypair generate ./keys/pri_c ./identities/pub_c \"UnlimitedGamesButNoGames\" 1"
 result=$(eval $command)
 exit_code=$?
 if [ $exit_code -eq 0 ]; then
@@ -51,7 +68,7 @@ fi
 
 # Delete ./keys/pri_a and ./identities/pub_a and verify they were removed
 
-command="./iris keypair delete ./keys/pri_a ./identities/pub_a"
+command="$executable keypair delete ./keys/pri_a ./identities/pub_a"
 result=$(eval $command)
 exit_code=$?
 if [ $exit_code -eq 0 ]; then
@@ -77,7 +94,7 @@ fi
 # Encrypt using ./identities/pub_b
 
 plaintext="Hello, world!"
-command="./iris keypair encrypt ./identities/pub_b \"$plaintext\""
+command="$executable keypair encrypt ./identities/pub_b \"$plaintext\""
 ciphertext=$(eval $command)
 exit_code=$?
 if [ $exit_code -eq 0 ]; then
@@ -90,7 +107,7 @@ fi
 
 # Decrypt using ./keys/pri_b
 
-command="./iris keypair decrypt ./keys/pri_b $ciphertext"
+command="$executable keypair decrypt ./keys/pri_b $ciphertext"
 derived_plaintext=$(eval $command)
 exit_code=$?
 if [ $exit_code -eq 0 ]; then
@@ -113,7 +130,7 @@ fi
 
 command="cat ./identities/pub_b"
 public_key=$(eval $command)
-command="./iris identity add ./identities/pub_b $public_key"
+command="$executable identity add ./identities/pub_b $public_key"
 result=$(eval $command)
 exit_code=$?
 if [ $exit_code -eq 0 ]; then
@@ -132,7 +149,7 @@ fi
 
 # Sign a message and verify it using the identity command
 
-command="./iris keypair sign ./keys/pri_b \"$plaintext\""
+command="$executable keypair sign ./keys/pri_b \"$plaintext\""
 result=$(eval $command)
 exit_code=$?
 if [ $exit_code -eq 0 ]; then
@@ -148,7 +165,7 @@ read -r text_hash <&3
 read -r signature <&3
 exec 3<&-
 
-command="./iris identity verify ./identities/pub_b $signature $text_hash"
+command="$executable identity verify ./identities/pub_b $signature $text_hash"
 result=$(eval $command)
 exit_code=$?
 if [ $exit_code -eq 0 ]; then
@@ -167,7 +184,7 @@ fi
 
 # List identities
 
-command="./iris identity list ./identities/"
+command="$executable identity list ./identities/"
 result=$(eval $command)
 exit_code=$?
 if [ $exit_code -eq 0 ]; then
@@ -180,7 +197,7 @@ fi
 
 # Remove identity
 
-command="./iris identity remove ./identities/pub_b"
+command="$executable identity remove ./identities/pub_b"
 result=$(eval $command)
 exit_code=$?
 if [ $exit_code -eq 0 ]; then
@@ -193,7 +210,7 @@ fi
 
 # Remove private key via identity command
 
-command="./iris identity remove ./keys/pri_b"
+command="$executable identity remove ./keys/pri_b"
 result=$(eval $command)
 exit_code=$?
 if [ $exit_code -eq 0 ]; then
@@ -203,10 +220,91 @@ elif [ $exit_code -eq 1 ]; then
 else
     echo -e "\033[33m[$exit_code] '$command'\033[0m"
 fi
+
+# Test the keypair help command
+
+command="$executable keypair --help"
+result=$(eval $command)
+exit_code=$?
+if [ $exit_code -eq 0 ]; then
+    echo -e "\033[32m[P] '$command'\033[0m"
+elif [ $exit_code -eq 1 ]; then
+    echo -e "\033[33m[F] '$command'\033[0m"
+else
+    echo -e "\033[33m[$exit_code] '$command'\033[0m"
+fi
+
+# Store the result into a temp file
+
+echo "$result" > ./temp_file.txt
+
+# Validate the temp file was created
+
+if [ -f "./temp_file.txt" ]; then
+    echo -e "\033[32m[P] ./temp_file.txt was created\033[0m"
+else
+    echo -e "\033[33m[F] ./temp_file.txt was not created\033[0m"
+fi
+
+# Test the encrypt_file command
+
+command="$executable keypair encrypt_file ./identities/pub_c ./temp_file.txt ./temp_file.txt.enc"
+result=$(eval $command)
+exit_code=$?
+if [ $exit_code -eq 0 ]; then
+    echo -e "\033[32m[P] '$command'\033[0m"
+elif [ $exit_code -eq 1 ]; then
+    echo -e "\033[33m[F] '$command'\033[0m"
+else
+    echo -e "\033[33m[$exit_code] '$command'\033[0m"
+fi
+
+# Validate the encrypted file exists
+
+if [ -f "./temp_file.txt.enc" ]; then
+    echo -e "\033[32m[P] ./temp_file.txt.enc was created\033[0m"
+else
+    echo -e "\033[33m[F] ./temp_file.txt.enc was not created\033[0m"
+fi
+
+# Test the decrypt_file command
+
+command="$executable keypair decrypt_file ./keys/pri_c ./temp_file.txt.enc ./temp_file.txt.dec"
+result=$(eval $command)
+exit_code=$?
+if [ $exit_code -eq 0 ]; then
+    echo -e "\033[32m[P] '$command'\033[0m"
+elif [ $exit_code -eq 1 ]; then
+    echo -e "\033[33m[F] '$command'\033[0m"
+else
+    echo -e "\033[33m[$exit_code] '$command'\033[0m"
+fi
+
+# Validate the decrypted file exists
+
+if [ -f "./temp_file.txt.dec" ]; then
+    echo -e "\033[32m[P] ./temp_file.txt.dec was created\033[0m"
+else
+    echo -e "\033[33m[F] ./temp_file.txt.dec was not created\033[0m"
+fi
+
+# Validate it matches the original file
+
+if cmp -s "./temp_file.txt" "./temp_file.txt.dec"; then
+    echo -e "\033[32m[P] ./temp_file.txt.dec matches ./temp_file.txt\033[0m"
+else
+    echo -e "\033[33m[F] ./temp_file.txt.dec does not match ./temp_file.txt\033[0m"
+fi
+
+# Delete the original, encrypted, and decrypted temp files
+
+rm ./temp_file.txt
+rm ./temp_file.txt.enc
+rm ./temp_file.txt.dec
 
 # Delete ./keys/pri_c and ./identities/pub_c and verify they were removed
 
-command="./iris keypair delete ./keys/pri_c ./identities/pub_c"
+command="$executable keypair delete ./keys/pri_c ./identities/pub_c"
 result=$(eval $command)
 exit_code=$?
 if [ $exit_code -eq 0 ]; then
@@ -216,6 +314,8 @@ elif [ $exit_code -eq 1 ]; then
 else
     echo -e "\033[33m[$exit_code] '$command'\033[0m"
 fi
+
+# Validate pri_c was removed.
 
 if [ ! -f "./keys/pri_c" ]; then
     echo -e "\033[32m[P] ./keys/pri_c was removed'\033[0m"
@@ -223,8 +323,16 @@ else
     echo -e "\033[33m[F] ./keys/pri_c was not removed'\033[0m"
 fi
 
+# Validate pub_c was removed.
+
 if [ ! -f "./identities/pub_c" ]; then
     echo -e "\033[32m[P] ./identities/pub_c was removed'\033[0m"
 else
     echo -e "\033[33m[F] ./identities/pub_c was not removed'\033[0m"
+fi
+
+# Add a pause to keep script from exiting before user can examine output
+
+if is_windows; then
+    read -n 1 -s -r -p "Press any key to continue..."
 fi

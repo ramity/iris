@@ -91,3 +91,9 @@ else
         echo "You chose not to download the latest version."
     fi
 fi
+
+# Add a pause to keep script from exiting before user can examine output
+
+if is_windows; then
+    read -n 1 -s -r -p "Press any key to continue..."
+fi
