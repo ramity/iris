@@ -76,7 +76,7 @@ fi
 # Add version file for update script
 
 touch $BUILD_DIR/version
-echo "v0.3.5" > $BUILD_DIR/version
+echo "v0.3.6" > $BUILD_DIR/version
 
 # Add ramity identity
 
