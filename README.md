@@ -66,7 +66,10 @@ Alice `cat`s her public key to the console, copies it, and shares it to Bob over
 ```
 cat ./identities/public_key
 ```
-> MIGbMBAGByqGSM49AgEGBSuBBAAjA4GGAAQBW9w/ObxNLQjObQ8XUVKF9kgk7NVlA+5SjItlL5ZuW1KR5GHForrGz244Xp1LG1/higCPCTD5DnjeIwX8EDNQunsBGOuR9BX1ldKdMJuOl9KufRRKuIFFOK4ihMum4sfHFV18BKxhlJkrqay6hqLnUvsRx/C32X7j70vLHxeRXhGAE4g=
+
+```
+MIGbMBAGByqGSM49AgEGBSuBBAAjA4GGAAQBW9w/ObxNLQjObQ8XUVKF9kgk7NVlA+5SjItlL5ZuW1KR5GHForrGz244Xp1LG1/higCPCTD5DnjeIwX8EDNQunsBGOuR9BX1ldKdMJuOl9KufRRKuIFFOK4ihMum4sfHFV18BKxhlJkrqay6hqLnUvsRx/C32X7j70vLHxeRXhGAE4g=
+```
 
 Bob adds Alice's public key to his iris instance:
 
@@ -82,7 +85,9 @@ Bob `cat`s his public key to the console, copies it, and shares it to Alice over
 cat ./keys/public_key
 ```
 
-> MIGbMBAGByqGSM49AgEGBSuBBAAjA4GGAAQBUXSK3fQJoz460Rwb/l/opXIJI6Spa/nRYwYjnQbDqknGOexgjbxr+pivGkIH2VO41ONU+aDCMcJ+QM4t+NBrrpsAr4ewQFgNmk1kBa11A60sc35SRVfJqAccvF3mAbE+t8WAkBnioRA/xo3VngZPQyDs6NuNgJxQqIEzpCyYC9bVQVs=
+```
+MIGbMBAGByqGSM49AgEGBSuBBAAjA4GGAAQBUXSK3fQJoz460Rwb/l/opXIJI6Spa/nRYwYjnQbDqknGOexgjbxr+pivGkIH2VO41ONU+aDCMcJ+QM4t+NBrrpsAr4ewQFgNmk1kBa11A60sc35SRVfJqAccvF3mAbE+t8WAkBnioRA/xo3VngZPQyDs6NuNgJxQqIEzpCyYC9bVQVs=
+```
 
 Alice adds Bob's public key to her iris instance:
 
